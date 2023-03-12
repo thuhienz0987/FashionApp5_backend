@@ -3,12 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConfig');
 const cookieParser = require('cookie-parser');
+const credentials = require('./middlewares/credentials');
+const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+require('express-async-errors');
 
-const rootRoutes = require('./routes/rootRoutes');
-const registerRoutes = require('./routes/registerRoutes');
-const authRoutes = require('./routes/authRoutes');
-const refreshRoutes = require('./routes/refreshRoutes');
-const verifyJWT = require('./middlewares/verifyJWT');
+const rootRoutes = require('./routes/index');
 
 const app = express();
 
@@ -17,6 +17,16 @@ connectDB();
 mongoose.connection.once('open', () => {
     app.listen(3000);
 });
+
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+
+// built-in middleware to handle urlencoded form data
+app.use(express.urlencoded({ extended: false }));
 
 // Middleware for json
 app.use(express.json());
@@ -29,10 +39,4 @@ app.use(express.static('public'));
 
 // Routes
 app.use(rootRoutes);
-app.use(registerRoutes);
-app.use(authRoutes);
-app.use(refreshRoutes);
-
-app.use(verifyJWT);
-app.get('/test', (req, res) => {res.status(200).json('OK')});
 
