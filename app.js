@@ -8,6 +8,7 @@ const rootRoutes = require('./routes/rootRoutes');
 const registerRoutes = require('./routes/registerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const refreshRoutes = require('./routes/refreshRoutes');
+const productRouters = require('./routes/productRouters');
 const verifyJWT = require('./middlewares/verifyJWT');
 
 const app = express();
@@ -32,7 +33,7 @@ app.use(rootRoutes);
 app.use(registerRoutes);
 app.use(authRoutes);
 app.use(refreshRoutes);
-
+app.use(productRouters);
 app.use(verifyJWT);
 app.get('/test', (req, res) => {res.status(200).json('OK')});
 
