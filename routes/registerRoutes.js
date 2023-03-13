@@ -6,7 +6,6 @@ const registerController = require('../controllers/registerController');
 const router = Router();
 
 // register routes
-//router.get('/signup', () => {});
 router.post('/signup', registerController.signup_post);
 
 

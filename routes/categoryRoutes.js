@@ -16,6 +16,6 @@ router.post('/category', categoryController.post_category);
 router.put('/category/:_id', categoryController.put_category);
 
 // delete category
-router.delete('/category/:categoryId', () => {});
+router.delete('/category/:_id', categoryController.delete_category);
 
 module.exports = router;

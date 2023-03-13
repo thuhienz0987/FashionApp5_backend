@@ -55,15 +55,18 @@ module.exports.login_post = async (req, res) => {
         user.refreshToken = refreshToken;
         const result = await user.save();
         console.log("login success: ", result);
-
+        
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: false, sameSite: 'None', maxAge: maxAgeRefreshToken * 1000 });
 
+        // delete refresh token and password from user info
+        user.refreshToken = undefined;
+        user.password = undefined;
+
         // Send authorization roles and access token to user
-        res.json({ accessToken });
+        res.json({ accessToken, user });
     }
     catch (err) {
-        // const errors = handleErrors(err);
         throw err;
     }
 };
