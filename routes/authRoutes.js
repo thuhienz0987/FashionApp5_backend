@@ -7,4 +7,5 @@ const router = Router();
 // auth routes
 router.post('/login', authController.login_post);
 
+router.get('/logout', authController.logout_post);
 module.exports = router;

@@ -6,8 +6,8 @@ const {TokenExpiredError} =jwt;
 module.exports = async (req,res,next)=>{
     const authHeader= req.get('Authorization');
     if(!authHeader){
-        const error = new Error('Không tìm thấy access token!');
-         error.statusCode = 403;
+        const error = new Error('not found access token!');
+         error.statusCode = '403';
         return next(error);
     }
 
@@ -18,14 +18,14 @@ module.exports = async (req,res,next)=>{
     }
     catch(error){
         if (error instanceof TokenExpiredError) {
-            error.statusCode = 401;
+            error.statusCode = '401';
             error.message = 'Unauthorized! Access Token was expired!';
         }
         return next(error);
     }
     if(!decodedToken){
         const error = new Error('Not authenticated.');
-        error.statusCode = 401;
+        error.statusCode = '401';
         return next(error);
     }
 

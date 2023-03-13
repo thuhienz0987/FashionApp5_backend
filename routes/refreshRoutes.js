@@ -6,6 +6,6 @@ const router = Router();
 
 
 // refresh token router
-router.post('/refresh', refreshController.handleRefreshToken);
+router.get('/refresh', refreshController.handleRefreshToken);
 
 module.exports = router;

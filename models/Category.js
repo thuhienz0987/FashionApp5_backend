@@ -1,17 +1,25 @@
 const mongoose = require('mongoose');
 
 const categorySchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
-        require: true,
+        required: [true, 'category name must not be empty!'],
         unique: true,
+        trim: true,
+        minLength: [2, 'category name must have 2 or more characters'],
+        maxLength: [32, 'category name must have 32 or less character']
     },
-    parent:{
+    parentId: {
         type: mongoose.Types.ObjectId,
-        ref: 'Category',        
     },
+    description: {
+        type: String,
+        required: true
+    }
+},
+{ timestamps: true }
+);
 
-},{timestamps: true})
+const Category = mongoose.model('category', categorySchema);
 
-categorySchema.index({name:1},{unique: true});
-const Category= mongoose.model('Category', categorySchema);
+module.exports = Category;  

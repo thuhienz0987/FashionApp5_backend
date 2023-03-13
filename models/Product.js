@@ -13,28 +13,28 @@ const productSchema= new mongoose.Schema({
         type: String,
         require: [true,'A product must have a detail'],
     },
-    images: [
-        {
-          ref: {
-            type: String,
-            required: [true,'A product must have a image'],
-          },
-          url: {
-            type: String,
-            required: [true,'A image must have a url'],
-          },
-        },
-    ],
-    posterImage: {
-        ref: {
-          type: String,
-          required: [true,'A product must have a poster image'],
-        },
-        url: {
-          type: String,
-          required: [true,'A poster image must have a url'],
-        },
-    },
+    // images: [
+    //     {
+    //       ref: {
+    //         type: String,
+    //         required: [true,'A product must have a image'],
+    //       },
+    //       url: {
+    //         type: String,
+    //         required: [true,'A image must have a url'],
+    //       },
+    //     },
+    // ],
+    // posterImage: {
+    //     ref: {
+    //       type: String,
+    //       required: [true,'A product must have a poster image'],
+    //     },
+    //     url: {
+    //       type: String,
+    //       required: [true,'A poster image must have a url'],
+    //     },
+    // },
     quantity:{
         type: Number,
         default: 0,
@@ -52,7 +52,7 @@ const productSchema= new mongoose.Schema({
             id:{
                 type: mongoose.Schema.ObjectId,
                 ref: 'Tag',
-                require: 'false',
+                require: false,
             },
             name:{
                 type: String,
@@ -60,10 +60,17 @@ const productSchema= new mongoose.Schema({
             },
         },
     ],
+    isDeleted:{
+        type: Boolean,
+        require: true,
+        default: false,
+    }
 
 
 },{timestamps: true});
 
-productSchema.index({name: 'text', categoryId: 'text',tag: 'text'})
+// productSchema.index({name: 'text', categoryId: 'text',tag: 'text'})
 
-const Product = mongoose.model('Product', productSchema)
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;
