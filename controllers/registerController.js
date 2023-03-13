@@ -17,9 +17,6 @@ passwordSchema
 .has().not().spaces();                          // Should not have spaces
 
 // controller action
-module.exports.signup_get = (req, res) => {
-    res.send('Sign up');
-};
 
 module.exports.signup_post = async (req, res) => {
     const { email, password, firstName, lastName, phoneNumber } = req.body;

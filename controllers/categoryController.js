@@ -1,10 +1,9 @@
 const Category = require('../models/Category');
 const mongoose = require('mongoose');
 const NotFoundError = require('../errors/internalServerError');
-const InternalServerError = require('../errors/internalServerError');
 
 module.exports.get_all_category = async (req, res) => {
-    Category.find()
+    Category.find({isDeleted: false})
     .then((result) => {
         res.send(result);
     })
@@ -35,7 +34,7 @@ module.exports.post_category = async (req, res) => {
         let category = req.body;
 
         // check if parentId is empty
-        if(category.parentId == '' || category.parentId == null) {
+        if (category.parentId == '' || category.parentId == null) {
             delete category.parentId;
         }
 
@@ -53,9 +52,31 @@ module.exports.post_category = async (req, res) => {
 
 module.exports.put_category = async (req, res) => {
     try {
+        const { _id } = req.params;
+        const category = req.body;
+
+        // find by id then update 
+        const result = await Category.findByIdAndUpdate(_id, category, {new: true});
         
+        res.status(200).json(result);
+
     }
     catch (err) {
+        throw err;
+    }
+};
 
+module.exports.delete_category = async (req, res) => {
+    try {
+        const { _id } = req.params;
+
+        // find by id then update 
+        const result = await Category.findByIdAndUpdate(_id, {isDeleted: true}, {new: true});
+        
+        res.status(200).json(result);
+
+    }
+    catch (err) {
+        throw err;
     }
 };
