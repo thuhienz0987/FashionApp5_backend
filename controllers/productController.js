@@ -17,6 +17,7 @@ exports.postCreateProduct = async (req,res)=>{
         const tag= req.body.tag;
         const categoryId = req.body.categoryId;
 
+        
         const product = new Product({
             name,
             price,
@@ -76,7 +77,7 @@ exports.updateProduct = async(req,res)=>{
 exports.deleteProduct =async(req,res)=>{
     try{
         const _id = req.params._id;
-        console.log(_id);
+        // console.log(_id);
         const product= await Product.findByIdAndUpdate({_id},{isDeleted: true},);
 
         res.status(200).json({

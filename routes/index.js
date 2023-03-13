@@ -7,6 +7,7 @@ const verifyJWT = require('../middlewares/verifyJWT');
 const categoryRoutes = require('./categoryRoutes');
 const errorHandler = require("../middlewares/errorHandler");
 const productRouters= require('./productRouters');
+const tagRouters=require('./tagRouters');
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.use(verifyJWT);
 router.get('/test', (req, res) => {res.status(200).json('OK')});
 router.use(categoryRoutes);
 router.use(productRouters);
-
+router.use(tagRouters);
 
 // error handler all routes
 router.use(errorHandler);

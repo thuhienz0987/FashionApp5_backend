@@ -52,7 +52,7 @@ const productSchema= new mongoose.Schema({
             id:{
                 type: mongoose.Schema.ObjectId,
                 ref: 'Tag',
-                require: false,
+                require: true,
             },
             name:{
                 type: String,

@@ -3,10 +3,10 @@ const productController = require('../controllers/productController');
 const isAuth= require('../middlewares/is-auth');
 
 
-//initial product controller
+
 const router = Router();
 
-// product controller 
+// product 
 router.get('/get-all-product',productController.getAllProduct);
 router.get('/get-product-by-id/:_id', productController.getProductById);
 router.post('/post-create-product', productController.postCreateProduct);
