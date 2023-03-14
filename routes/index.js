@@ -8,6 +8,9 @@ const categoryRoutes = require('./categoryRoutes');
 const errorHandler = require("../middlewares/errorHandler");
 const productRouters= require('./productRouters');
 const tagRouters=require('./tagRouters');
+const sizeRouters= require('./sizeRouters');
+const colorRouters= require('./colorRouters');
+const detailProductRouters= require('./detailProductRouters');
 
 const router = Router();
 
@@ -22,6 +25,9 @@ router.get('/test', (req, res) => {res.status(200).json('OK')});
 router.use(categoryRoutes);
 router.use(productRouters);
 router.use(tagRouters);
+router.use(sizeRouters);
+router.use(colorRouters);
+router.use(detailProductRouters);
 
 // error handler all routes
 router.use(errorHandler);

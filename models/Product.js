@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const productSchema= new mongoose.Schema({
     name:{
         type: String,
-        require: [true,'A product must have a name'],
+        required: [true,'A product must have a name'],
     },
     price:{
         type: Number,
-        require: [true,'A product must have a price'],
+        required: [true,'A product must have a price'],
     },
     detail:{
         type: String,
-        require: [true,'A product must have a detail'],
+        required: [true,'A product must have a detail'],
     },
     // images: [
     //     {
@@ -41,28 +41,29 @@ const productSchema= new mongoose.Schema({
     },
     description:{
         type: String,
-        require: [true,'A product must have a description'],
+        required: [true,'A product must have a description'],
     },
     categoryId:{
         type: mongoose.Types.ObjectId,
         ref: 'Category',
+        required: true,
     },
     tag:[
         {
             id:{
                 type: mongoose.Schema.ObjectId,
                 ref: 'Tag',
-                require: true,
+                required: true,
             },
             name:{
                 type: String,
-                require: false,
+                required: false,
             },
         },
     ],
     isDeleted:{
         type: Boolean,
-        require: true,
+        required: true,
         default: false,
     }
 

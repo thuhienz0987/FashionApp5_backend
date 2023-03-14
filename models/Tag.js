@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const tagSchema = new mongoose.Schema({
     name:{
         type: String,
-        require: [true,'A tag must have a name'],
+        required: [true,'A tag must have a name'],
         // unique: true,
     },
     isDeleted:{
         type: Boolean,
-        require: true,
+        required: true,
         default: false,
     },
 },{timestamps: true});

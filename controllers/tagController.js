@@ -22,9 +22,17 @@ exports.updateTag = async (req,res) =>{
     try{
         const _id= req.params._id;
         const name= req.body.name;
+        const isDelete= req.body.isDelete;
 
         const tag= await Tag.findById(_id);
-        tag.name= name;
+        if(name){
+            tag.name= name;
+        }
+        
+        if(tag){
+            tag.isDeleted= isDelete;
+        }
+        
 
         const updateTag= await tag.save();
         res.status(200).json({

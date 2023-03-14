@@ -1,6 +1,5 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
-const { query } = require('express');
 
 
 exports.postCreateProduct = async (req,res)=>{
@@ -16,6 +15,7 @@ exports.postCreateProduct = async (req,res)=>{
         const description= req.body.description;
         const tag= req.body.tag;
         const categoryId = req.body.categoryId;
+        const detailProductId= req.body.detailProductId;
 
         
         const product = new Product({
@@ -28,6 +28,7 @@ exports.postCreateProduct = async (req,res)=>{
             description,
             tag,
             categoryId,
+            detailProductId,
         });
 
         await product.save();
@@ -53,6 +54,7 @@ exports.updateProduct = async(req,res)=>{
         const description= req.body.description;
         const tag= req.body.tag;
         const categoryId = req.body.categoryId;
+        const detailProductId= req.body.detailProductId;
         const product = await Product.findById(_id);
         product.name =name;
         product.price=price;
@@ -63,6 +65,7 @@ exports.updateProduct = async(req,res)=>{
         product.description=description;
         product.tag=tag;
         product.categoryId=categoryId;
+        product.detailProductId=detailProductId;
         const updateProduct = await product.save();
         res.status(200).json({
             message: 'Product updated',
