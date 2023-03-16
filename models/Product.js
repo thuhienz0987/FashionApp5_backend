@@ -50,15 +50,10 @@ const productSchema= new mongoose.Schema({
     },
     tag:[
         {
-            id:{
-                type: mongoose.Schema.ObjectId,
-                ref: 'Tag',
-                required: true,
-            },
-            name:{
-                type: String,
-                required: false,
-            },
+            type: mongoose.Schema.ObjectId,
+            ref: 'Tag',
+            required: true,
+
         },
     ],
     isDeleted:{

@@ -1,9 +1,9 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const Tag= require('../models/Tag');
 
 
 exports.postCreateProduct = async (req,res)=>{
-    // console.log(db.Category.find());
     try{
 
         const name = req.body.name;
@@ -90,8 +90,17 @@ exports.deleteProduct =async(req,res)=>{
     catch(err){
         throw err;
     }
-}
+};
 
+exports.getAllProduct = async(req,res)=>{
+    Product.find()
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
 exports.getProductById = async(req,res)=>{
     try{
         
@@ -109,12 +118,36 @@ exports.getProductById = async(req,res)=>{
     }
 };
 
-exports.getAllProduct = async(req,res)=>{
-    Product.find()
-    .then((result)=>{
-        res.send(result);
-    })
-    .catch((err)=>{
-        throw err;
-    })
+exports.getProductByCategoryId= async(req,res)=>{
+    try{
+        const _id= req.params._id;
+        const category = Category.findById(_id);
+        const product = Product.find({categoryId: _id})
+        .then((result)=>{
+            res.send(result);
+        })
+        .catch((err)=>{
+            throw new NotFoundError(`Not found product in category id ${_id}`);
+        })
+    }
+    catch(err){
+        throw err
+    }
 };
+
+exports.getProductByTagId = async(req,res)=>{
+    try{
+        const _id= req.params._id;
+        const tag= Tag.findById(_id);
+        const product = Product.find({tag: _id})
+        .then((result)=>{
+            res.send(result);
+        })
+        .catch((err)=>{
+            throw new NotFoundError(`Not found product in category id ${_id}`);
+        })
+    }
+    catch(err){
+        throw err;
+    }
+}

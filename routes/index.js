@@ -11,6 +11,8 @@ const tagRouters=require('./tagRouters');
 const sizeRouters= require('./sizeRouters');
 const colorRouters= require('./colorRouters');
 const detailProductRouters= require('./detailProductRouters');
+const blogRouters = require('./blogRouters');
+
 
 const router = Router();
 
@@ -28,6 +30,9 @@ router.use(tagRouters);
 router.use(sizeRouters);
 router.use(colorRouters);
 router.use(detailProductRouters);
+router.use(blogRouters);
+
+
 
 // error handler all routes
 router.use(errorHandler);
