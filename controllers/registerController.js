@@ -65,7 +65,7 @@ module.exports.signup_post = async (req, res) => {
         res.status(201).json({ 'success': `New user ${user} created!` });
     }
     catch (err) {
-        //if (err.code === 11000) throw new BadRequestError({"message": "This email has already been registered"})
+        if (err.code === 11000) throw new BadRequestError({"message": "This email has already been registered"})
         throw err;
     }
 };

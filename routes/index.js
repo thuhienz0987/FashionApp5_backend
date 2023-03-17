@@ -6,7 +6,13 @@ const refreshRoutes = require('./refreshRoutes');
 const verifyJWT = require('../middlewares/verifyJWT');
 const categoryRoutes = require('./categoryRoutes');
 const errorHandler = require("../middlewares/errorHandler");
-const imageRoutes = require('./imageRoutes');
+const productRouters= require('./productRouters');
+const tagRouters=require('./tagRouters');
+const sizeRouters= require('./sizeRouters');
+const colorRouters= require('./colorRouters');
+const detailProductRouters= require('./detailProductRouters');
+const blogRouters = require('./blogRouters');
+
 
 const router = Router();
 
@@ -20,6 +26,13 @@ router.use(imageRoutes);
 router.use(verifyJWT);
 router.get('/test', (req, res) => {res.status(200).json('OK')});
 router.use(categoryRoutes);
+router.use(productRouters);
+router.use(tagRouters);
+router.use(sizeRouters);
+router.use(colorRouters);
+router.use(detailProductRouters);
+router.use(blogRouters);
+
 
 
 // error handler all routes

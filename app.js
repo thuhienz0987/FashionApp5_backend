@@ -9,6 +9,11 @@ const corsOptions = require('./config/corsOptions');
 require('express-async-errors');
 
 const rootRoutes = require('./routes/index');
+const registerRoutes = require('./routes/registerRoutes');
+const authRoutes = require('./routes/authRoutes');
+const refreshRoutes = require('./routes/refreshRoutes');
+const productRouters = require('./routes/productRouters');
+const verifyJWT = require('./middlewares/verifyJWT');
 
 const app = express();
 
@@ -39,4 +44,10 @@ app.use(express.static('public'));
 
 // Routes
 app.use(rootRoutes);
+// app.use(registerRoutes);
+// app.use(authRoutes);
+// app.use(refreshRoutes);
+// app.use(productRouters);
+// app.use(verifyJWT);
+app.get('/test', (req, res) => {res.status(200).json('OK')});
 
