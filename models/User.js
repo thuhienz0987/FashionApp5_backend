@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
     profileImage: {
         type: String
     },
+    emailVerified: {
+        type: Boolean,
+        require: true,
+        default: false
+    },
     refreshToken: {
         type: String
     },
@@ -56,6 +61,21 @@ userSchema.statics.login = async function(email, password) {
     }
     throw Error('incorrect email');
 };
+
+userSchema.methods.comparePassword = async function (password) {
+    const result = await bcrypt.compare(password, this.password);
+    return result;
+};
+
+userSchema.pre('save', async function(next) {
+    if (this.isModified('password')) {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(this.password, salt);
+        this.password = hashedPassword;
+    }
+    
+    next();
+})
 
 const User = mongoose.model('user', userSchema);
 

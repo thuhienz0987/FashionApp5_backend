@@ -7,6 +7,7 @@ const router = Router();
 
 // register routes
 router.post('/signup', registerController.signup_post);
+router.post('/verify-email', registerController.verifyEmail);
 
 
 module.exports = router;

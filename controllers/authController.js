@@ -1,5 +1,15 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const BadRequestError = require('../errors/badRequestError');
+const ForbiddenError = require('../errors/forbiddenError');
+const NotFoundError = require('../errors/notFoundError');
+const ResetToken = require('../models/resetToken');
+
+const { createRandomBytes } = require('../utils/helper');
+const { mailTransport, forgetPasswordTemplate, passwordResetTemplate } = require('../utils/mail');
+const passwordValidator = require('password-validator');
+
+let passwordSchema = new passwordValidator();
 
 // handle errors
 const handleErrors = (err) => {
@@ -90,4 +100,75 @@ module.exports.logout_post = async (req, res) => {
 
     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
     res.sendStatus(204);
+};
+
+module.exports.forget_password = async (req, res) => {
+    const { email } = req.body;
+    if(!email) throw new BadRequestError("Please provide a valid email!");
+
+    const user = await User.findOne({ email });
+    if (!user) throw new NotFoundError("User not found, invalid request");
+
+    const token = await ResetToken.findOne({owner: user._id});
+    if (token) throw new ForbiddenError("Only after one hour you can request for another token!");
+
+    const newToken = await createRandomBytes();
+    const resetToken = new ResetToken({
+        owner: user._id,
+        token: newToken
+    });
+
+    const result = await resetToken.save();
+
+    mailTransport().sendMail({
+        from: 'fashionapp5@gmail.com',
+        to: user.email,
+        subject: 'Password Reset',
+        html: forgetPasswordTemplate(`http://localhost:3000/reset-password?token=${newToken}&id=${user._id}`),
+    });
+
+    res.status(200).json({"Status": "Success", "message": "Password reset link is sent to your email"});
+};
+
+passwordSchema
+.is().min(8)                                    // Minimum length 8
+.is().max(100)                                  // Maximum length 100
+.has().uppercase()                              // Must have uppercase letters
+.has().lowercase()                              // Must have lowercase letters
+.has().not().spaces(); 
+
+module.exports.reset_password = async (req, res) => {
+    try {
+        const { password } = req.body;
+        console.log(password);
+    
+    const user = await User.findById(req.user._id);
+    if (!user) throw new NotFoundError("User not found!");
+    
+    const isSamePassword = await user.comparePassword(password);
+    if(isSamePassword) throw new BadRequestError("New password must be different from the old one!");
+    
+    // validate password
+    const validateResult = passwordSchema.validate(password.trim(), { details: true });
+    if (validateResult.length != 0) {
+        throw new BadRequestError(validateResult);
+    }
+    
+    user.password = password.trim();
+    await user.save();
+    
+    await ResetToken.findOneAndDelete({owner: user._id});
+    
+    mailTransport().sendMail({
+        from: 'fashionapp5@gmail.com',
+        to: user.email,
+        subject: 'Password Reset Successfully',
+        html: passwordResetTemplate(),
+    });
+    
+    res.json({Status: "Success", message: "Password Reset Successfully"}); 
+    }
+    catch (err) { 
+        throw err 
+    }
 };

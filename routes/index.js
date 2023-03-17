@@ -6,6 +6,7 @@ const refreshRoutes = require('./refreshRoutes');
 const verifyJWT = require('../middlewares/verifyJWT');
 const categoryRoutes = require('./categoryRoutes');
 const errorHandler = require("../middlewares/errorHandler");
+const imageRoutes = require('./imageRoutes');
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use(rootRoutes);
 router.use(registerRoutes);
 router.use(authRoutes);
 router.use(refreshRoutes);
+router.use(imageRoutes);
 
 router.use(verifyJWT);
 router.get('/test', (req, res) => {res.status(200).json('OK')});
