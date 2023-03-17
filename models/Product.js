@@ -9,9 +9,17 @@ const productSchema= new mongoose.Schema({
         type: Number,
         required: [true,'A product must have a price'],
     },
-    detail:{
+    material:{
         type: String,
-        required: [true,'A product must have a detail'],
+        required: [true,'A product must have a material'],
+        maxLength: [255,'A material must have maximum of 255 character'],
+        minLength: [10,'A material must have minimum of 10 character'],
+    },
+    care:{
+        type: String,
+        required: [true,'A product must have a care'],
+        maxLength: [255,'A material must have maximum of 255 character'],
+        minLength: [10,'A material must have minimum of 10 character'],
     },
     // images: [
     //     {
@@ -38,6 +46,7 @@ const productSchema= new mongoose.Schema({
     quantity:{
         type: Number,
         default: 0,
+        required: true,
     },
     description:{
         type: String,
@@ -46,13 +55,13 @@ const productSchema= new mongoose.Schema({
     categoryId:{
         type: mongoose.Types.ObjectId,
         ref: 'Category',
-        required: true,
+        required: [true,'A product must have a category']
     },
     tag:[
         {
             type: mongoose.Schema.ObjectId,
             ref: 'Tag',
-            required: true,
+            required: [true,'A product must have a tag']
 
         },
     ],

@@ -8,7 +8,8 @@ exports.postCreateProduct = async (req,res)=>{
 
         const name = req.body.name;
         const price = req.body.price;
-        const detail = req.body.detail;
+        const material = req.body.material;
+        const care= req.body.care;
         // const images=req.body.images;
         // const posterImage = images[0];
         const quantity = req.body.quantity;
@@ -21,7 +22,8 @@ exports.postCreateProduct = async (req,res)=>{
         const product = new Product({
             name,
             price,
-            detail,
+            material,
+            care,
             // images,
             // posterImage,
             quantity,
@@ -47,7 +49,8 @@ exports.updateProduct = async(req,res)=>{
         const _id = req.params._id;
         const name = req.body.name;
         const price = req.body.price;
-        const detail = req.body.detail;
+        const material = req.body.material;
+        const care= req.body.care;
         // const images=req.body.images;
         // const posterImage = images[0];
         const quantity = req.body.quantity;
@@ -58,7 +61,8 @@ exports.updateProduct = async(req,res)=>{
         const product = await Product.findById(_id);
         product.name =name;
         product.price=price;
-        product.detail=detail;
+        product.material=material;
+        product.care= care;
         // product.images=images;
         // product.posterImage=posterImage;
         product.quantity=quantity;
@@ -150,4 +154,5 @@ exports.getProductByTagId = async(req,res)=>{
     catch(err){
         throw err;
     }
-}
+};
+

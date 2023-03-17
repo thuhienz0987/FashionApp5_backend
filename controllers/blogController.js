@@ -88,4 +88,5 @@ exports.deleteBlog= async(req,res)=>{
     }catch(err){
         throw err;
     }
-}
+};
+
