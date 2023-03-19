@@ -1,75 +1,78 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const Tag= require('../models/Tag');
+const cloudinary = require('../helper/imageUpload');
+// const formData = new FormData();
 
 
 exports.postCreateProduct = async (req,res)=>{
+    const {name,price,material,care,image,quantity,description,tag,categoryId}= req.body;
+    const posterImage= image;
     try{
-
-        const name = req.body.name;
-        const price = req.body.price;
-        const material = req.body.material;
-        const care= req.body.care;
-        // const images=req.body.images;
-        // const posterImage = images[0];
-        const quantity = req.body.quantity;
-        const description= req.body.description;
-        const tag= req.body.tag;
-        const categoryId = req.body.categoryId;
-        const detailProductId= req.body.detailProductId;
-
-        
-        const product = new Product({
-            name,
-            price,
-            material,
-            care,
-            // images,
-            // posterImage,
-            quantity,
-            description,
-            tag,
-            categoryId,
-            detailProductId,
+        const imagesInfo = await cloudinary.uploader.upload(req.file.path,{
+            folder: 'products',
+            width: 200,
+            height: 200,
+            crop: 'scale',
         });
 
-        await product.save();
-        res.status(201).json({
-            message: 'Product created successfully',
+        const product= await Product.create({
+
+            name,price,material,care,quantity,description,tag,categoryId,
+            image:{
+                public_id: imagesInfo.public_id,
+                url : imagesInfo.url,
+            },
+            posterImage:{
+                public_id: imagesInfo.public_id,
+                url : imagesInfo.url,
+            },
+        })
+        res.status(200).json({
+            message: 'Product updated',
             product: product,
         });
     }
     catch(err){
         throw err;
     }
-};
+       
+    
+
+},
 
 exports.updateProduct = async(req,res)=>{
     try{
         const _id = req.params._id;
-        const name = req.body.name;
-        const price = req.body.price;
-        const material = req.body.material;
-        const care= req.body.care;
-        // const images=req.body.images;
-        // const posterImage = images[0];
-        const quantity = req.body.quantity;
-        const description= req.body.description;
-        const tag= req.body.tag;
-        const categoryId = req.body.categoryId;
-        const detailProductId= req.body.detailProductId;
+        const {name,price,material,care,image,description,tag,categoryId}= req.body;
+        const posterImage= image;
+
+        const imagesInfo = await cloudinary.uploader.upload(req.file.path,{
+            folder: 'products',
+            width: 200,
+            height: 200,
+            crop: 'scale',
+        });
+
         const product = await Product.findById(_id);
+
         product.name =name;
         product.price=price;
         product.material=material;
         product.care= care;
-        // product.images=images;
-        // product.posterImage=posterImage;
-        product.quantity=quantity;
+        product.image={
+            public_id: imagesInfo.public_id,
+            url: imagesInfo.url,
+        };
+        product.posterImage=
+        {
+            public_id: imagesInfo.public_id,
+            url: imagesInfo.url,   
+        }
+        // product.quantity=quantity;
         product.description=description;
         product.tag=tag;
         product.categoryId=categoryId;
-        product.detailProductId=detailProductId;
         const updateProduct = await product.save();
         res.status(200).json({
             message: 'Product updated',

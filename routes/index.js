@@ -21,7 +21,6 @@ router.use(rootRoutes);
 router.use(registerRoutes);
 router.use(authRoutes);
 router.use(refreshRoutes);
-router.use(imageRoutes);
 
 router.use(verifyJWT);
 router.get('/test', (req, res) => {res.status(200).json('OK')});

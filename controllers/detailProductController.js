@@ -3,10 +3,7 @@ const Product = require('../models/Product');
 
 exports.postCreateDetail = async (req,res)=>{
     try{
-        const sizeId= req.body.sizeId;
-        const colorId= req.body.colorId;
-        const quantity= req.body.quantity;
-        const productId= req.body.productId;
+        const {sizeId,colorId,quantity,productId}= req.body;
 
         const product= await Product.findById(productId);
         const detailProduct= new DetailProduct({
@@ -15,8 +12,9 @@ exports.postCreateDetail = async (req,res)=>{
             quantity,
             productId,
         });
+        console.log(detailProduct);
         await detailProduct.save();
-        product.quantity+=quantity;
+        product.quantity= product.quantity+quantity;
         await product.save();
         res.status(201).json({
             message: 'Detail product created successfully',
@@ -58,10 +56,7 @@ exports.getDetailById = async(req,res)=>{
 exports.putUpdateDetail= async(req,res)=>{
     try{
         const _id= req.params._id;
-        const sizeId= req.body.sizeId;
-        const colorId= req.body.colorId;
-        const quantity= req.body.quantity;
-        const productId= req.body.productId;
+        const {sizeId,colorId,quantity,productId}= req.body;
     
         const product = await Product.findById(productId);
 
