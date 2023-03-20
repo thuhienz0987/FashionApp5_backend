@@ -1,19 +1,40 @@
 const  Blog = require('../models/Blog');
 const Category = require('../models/Category');
 const Tag= require('../models/Tag');
+const cloudinary= require('../helper/imageUpload');
+const { url } = require('../helper/imageUpload');
+
+
+const cloudinaryImageUploadMethod = async file => {
+    return new Promise(resolve => {
+        cloudinary.uploader.upload( file , (err, res) => {
+          if (err) return res.status(500).send("upload image error")
+            resolve({
+              res: res.secure_url
+            }) 
+          }
+        ) 
+    })
+  }
 
 exports.postCreateProduct =async(req,res)=>{
+    
     try{
-        const title = req.body .title;
-        const detail =req.body.detail;
-        const description = req.body.description;
-        const tag= req.body.tag;
-
-        const blog = new Blog({
+        const {title, detail,description,tag,}= req.body;
+        let image = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          image.push({url: newPath.res});
+        }
+                const blog = new Blog({
             title,
             detail,
             description,
             tag,
+            image: image,
+            posterImage: image[0],
         });
         await blog.save();
         res.status(201).json({
@@ -52,19 +73,35 @@ exports.getAllBlog = async(req,res)=>{
     })
 };
 
+exports.getRandomBlog = async(req,res)=>{
+    Blog.find().limit(4)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
+
 exports.updateBlog= async(req,res)=>{
     try{
         const _id= req.params._id;
-        const title = req.body .title;
-        const detail =req.body.detail;
-        const description = req.body.description;
-        const tag= req.body.tag;
+        const {title, detail,description,tag,}= req.body;
+        let imageUpdate = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          imageUpdate.push({url: newPath.res});
+        }
 
         const blog = await Blog.findById(_id);
         blog.title= title;
         blog.detail=detail;
         blog.description=description;
         blog.tag=tag;
+        blog.image=imageUpdate;
+        blog.posterImage= imageUpdate[0];
 
         const updateBlog = await blog.save();
         res.status(200).json({

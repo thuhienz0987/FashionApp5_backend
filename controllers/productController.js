@@ -2,34 +2,40 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const Tag= require('../models/Tag');
 const cloudinary = require('../helper/imageUpload');
-// const formData = new FormData();
 
+const cloudinaryImageUploadMethod = async file => {
+    return new Promise(resolve => {
+        cloudinary.uploader.upload( file , (err, res) => {
+          if (err) return res.status(500).send("upload image error")
+            resolve({
+              res: res.secure_url
+            }) 
+          }
+        ) 
+    })
+  }
 
 exports.postCreateProduct = async (req,res)=>{
-    const {name,price,material,care,image,quantity,description,tag,categoryId}= req.body;
-    const posterImage= image;
+    
     try{
-        const imagesInfo = await cloudinary.uploader.upload(req.file.path,{
-            folder: 'products',
-            width: 200,
-            height: 200,
-            crop: 'scale',
-        });
+    const {name,price,material,care,quantity,description,tag,categoryId}= req.body;
+
+        let image = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          image.push({url: newPath.res});
+        }
 
         const product= await Product.create({
 
             name,price,material,care,quantity,description,tag,categoryId,
-            image:{
-                public_id: imagesInfo.public_id,
-                url : imagesInfo.url,
-            },
-            posterImage:{
-                public_id: imagesInfo.public_id,
-                url : imagesInfo.url,
-            },
+            image:image,
+            posterImage:image[0],
         })
         res.status(200).json({
-            message: 'Product updated',
+            message: 'Product created',
             product: product,
         });
     }
@@ -44,15 +50,15 @@ exports.postCreateProduct = async (req,res)=>{
 exports.updateProduct = async(req,res)=>{
     try{
         const _id = req.params._id;
-        const {name,price,material,care,image,description,tag,categoryId}= req.body;
-        const posterImage= image;
+        const {name,price,material,care,description,tag,categoryId}= req.body;
 
-        const imagesInfo = await cloudinary.uploader.upload(req.file.path,{
-            folder: 'products',
-            width: 200,
-            height: 200,
-            crop: 'scale',
-        });
+        let imageUpdate = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          imageUpdate.push({url: newPath.res});
+        }
 
         const product = await Product.findById(_id);
 
@@ -60,16 +66,8 @@ exports.updateProduct = async(req,res)=>{
         product.price=price;
         product.material=material;
         product.care= care;
-        product.image={
-            public_id: imagesInfo.public_id,
-            url: imagesInfo.url,
-        };
-        product.posterImage=
-        {
-            public_id: imagesInfo.public_id,
-            url: imagesInfo.url,   
-        }
-        // product.quantity=quantity;
+        product.image=imageUpdate,
+        product.posterImage=imageUpdate[0],
         product.description=description;
         product.tag=tag;
         product.categoryId=categoryId;
@@ -108,6 +106,17 @@ exports.getAllProduct = async(req,res)=>{
         throw err;
     })
 };
+
+exports.getRandomProduct = async(req,res)=>{
+    Product.find().limit(10)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
+
 exports.getProductById = async(req,res)=>{
     try{
         
