@@ -21,28 +21,21 @@ const productSchema= new mongoose.Schema({
         maxLength: [255,'A material must have maximum of 255 character'],
         minLength: [10,'A material must have minimum of 10 character'],
     },
-    // images: [
-    //     {
-    //       ref: {
-    //         type: String,
-    //         required: [true,'A product must have a image'],
-    //       },
-    //       url: {
-    //         type: String,
-    //         required: [true,'A image must have a url'],
-    //       },
-    //     },
-    // ],
-    // posterImage: {
-    //     ref: {
-    //       type: String,
-    //       required: [true,'A product must have a poster image'],
-    //     },
-    //     url: {
-    //       type: String,
-    //       required: [true,'A poster image must have a url'],
-    //     },
-    // },
+    image: [
+        {
+            url:{
+                type: String,
+                required: true,
+            }
+        }
+    ],
+    posterImage: {
+        url:{
+            type: String,
+            required: true,
+        }
+    },
+
     quantity:{
         type: Number,
         default: 0,

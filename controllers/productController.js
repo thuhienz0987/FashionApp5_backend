@@ -1,74 +1,76 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const Tag= require('../models/Tag');
+const cloudinary = require('../helper/imageUpload');
 
+const cloudinaryImageUploadMethod = async file => {
+    return new Promise(resolve => {
+        cloudinary.uploader.upload( file , (err, res) => {
+          if (err) return res.status(500).send("upload image error")
+            resolve({
+              res: res.secure_url
+            }) 
+          }
+        ) 
+    })
+  }
 
 exports.postCreateProduct = async (req,res)=>{
+    
     try{
+    const {name,price,material,care,quantity,description,tag,categoryId}= req.body;
 
-        const name = req.body.name;
-        const price = req.body.price;
-        const material = req.body.material;
-        const care= req.body.care;
-        // const images=req.body.images;
-        // const posterImage = images[0];
-        const quantity = req.body.quantity;
-        const description= req.body.description;
-        const tag= req.body.tag;
-        const categoryId = req.body.categoryId;
-        const detailProductId= req.body.detailProductId;
+        let image = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          image.push({url: newPath.res});
+        }
 
-        
-        const product = new Product({
-            name,
-            price,
-            material,
-            care,
-            // images,
-            // posterImage,
-            quantity,
-            description,
-            tag,
-            categoryId,
-            detailProductId,
-        });
+        const product= await Product.create({
 
-        await product.save();
-        res.status(201).json({
-            message: 'Product created successfully',
+            name,price,material,care,quantity,description,tag,categoryId,
+            image:image,
+            posterImage:image[0],
+        })
+        res.status(200).json({
+            message: 'Product created',
             product: product,
         });
     }
     catch(err){
         throw err;
     }
-};
+       
+    
+
+},
 
 exports.updateProduct = async(req,res)=>{
     try{
         const _id = req.params._id;
-        const name = req.body.name;
-        const price = req.body.price;
-        const material = req.body.material;
-        const care= req.body.care;
-        // const images=req.body.images;
-        // const posterImage = images[0];
-        const quantity = req.body.quantity;
-        const description= req.body.description;
-        const tag= req.body.tag;
-        const categoryId = req.body.categoryId;
-        const detailProductId= req.body.detailProductId;
+        const {name,price,material,care,description,tag,categoryId}= req.body;
+
+        let imageUpdate = [];
+        const files = req.files;
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUploadMethod(path);
+          imageUpdate.push({url: newPath.res});
+        }
+
         const product = await Product.findById(_id);
+
         product.name =name;
         product.price=price;
         product.material=material;
         product.care= care;
-        // product.images=images;
-        product.quantity=quantity;
+        product.image=imageUpdate,
+        product.posterImage=imageUpdate[0],
         product.description=description;
         product.tag=tag;
         product.categoryId=categoryId;
-        product.detailProductId=detailProductId;
         const updateProduct = await product.save();
         res.status(200).json({
             message: 'Product updated',
@@ -104,6 +106,17 @@ exports.getAllProduct = async(req,res)=>{
         throw err;
     })
 };
+
+exports.getRandomProduct = async(req,res)=>{
+    Product.find().limit(10)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
+
 exports.getProductById = async(req,res)=>{
     try{
         

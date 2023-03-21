@@ -24,6 +24,21 @@ const blogSchema = new mongoose.Schema({
 
         },
     ],
+    image: [
+        {
+            url:{
+                type: String,
+                required: true,
+            }
+        }
+    ],
+    posterImage: {
+        url:{
+            type: String,
+            required: true,
+        }
+    },
+
     isDeleted: {
         type: Boolean,
         required: true,
