@@ -8,7 +8,8 @@ const cloudinaryImageUploadMethod = async file => {
         cloudinary.uploader.upload( file , (err, res) => {
           if (err) return res.status(500).send("upload image error")
             resolve({
-              res: res.secure_url
+              res: res.secure_url,
+              public_id: res.public_id
             }) 
           }
         ) 
@@ -25,7 +26,7 @@ exports.postCreateProduct = async (req,res)=>{
         for (const file of files) {
           const { path } = file;
           const newPath = await cloudinaryImageUploadMethod(path);
-          image.push({url: newPath.res});
+          image.push({url: newPath.res, public_id: newPath.public_id});
         }
 
         const product= await Product.create({
@@ -57,10 +58,18 @@ exports.updateProduct = async(req,res)=>{
         for (const file of files) {
           const { path } = file;
           const newPath = await cloudinaryImageUploadMethod(path);
-          imageUpdate.push({url: newPath.res});
+          imageUpdate.push({url: newPath.res, public_id: newPath.public_id});
         }
 
         const product = await Product.findById(_id);
+        let image =[]
+        for(let i=0;i< product.image.length;i++){
+            image.push(product.image[i].public_id);
+        }
+
+        cloudinary.api.delete_resources(image,function(err,result){
+            console.log(result);
+        });
 
         product.name =name;
         product.price=price;
