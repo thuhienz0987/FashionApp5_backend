@@ -31,11 +31,7 @@ module.exports.signup_post = async (req, res) => {
         if (validateResult.length != 0) {
             throw new BadRequestError(validateResult);
         }
-        
-        // encrypt the password and create new user
-        // const salt = await bcrypt.genSalt();
-        // const hashedPassword = await bcrypt.hash(password, salt);
-
+        // new user create
         const newUser = new User({
             email, 
             password, 
@@ -50,19 +46,18 @@ module.exports.signup_post = async (req, res) => {
             owner: newUser._id,
             token: OTP
         });
-        
+        // save the otp and user to db
         const verificationToken = await newVerificationToken.save();
         const user = await newUser.save();
         
-        
-
+        // send a mail that contain otp to the user's email
         mailTransport().sendMail({
             from: 'fashionapp5@gmail.com',
             to: newUser.email,
             subject: 'Verify your email account',
-            html: OtpTemplate(OTP),
+                html: OtpTemplate(OTP),
         });
-        res.status(201).json({ 'success': `New user ${user} created!` });
+        res.status(201).json({ 'success': true,'message': `New user ${user} created!` });
     }
     catch (err) {
         if (err.code === 11000) throw new BadRequestError({"message": "This email has already been registered"})

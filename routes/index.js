@@ -1,17 +1,21 @@
 const { Router } = require('express');
+const verifyJWT = require('../middlewares/verifyJWT');
+const errorHandler = require("../middlewares/errorHandler");
+
 const rootRoutes = require('./rootRoutes');
 const registerRoutes = require('./registerRoutes');
 const authRoutes = require('./authRoutes');
 const refreshRoutes = require('./refreshRoutes');
-const verifyJWT = require('../middlewares/verifyJWT');
+
 const categoryRoutes = require('./categoryRoutes');
-const errorHandler = require("../middlewares/errorHandler");
+
 const productRouters= require('./productRouters');
 const tagRouters=require('./tagRouters');
 const sizeRouters= require('./sizeRouters');
 const colorRouters= require('./colorRouters');
 const detailProductRouters= require('./detailProductRouters');
 const blogRouters = require('./blogRouters');
+const userRouters = require('./userRoutes');
 
 
 const router = Router();
@@ -21,10 +25,10 @@ router.use(rootRoutes);
 router.use(registerRoutes);
 router.use(authRoutes);
 router.use(refreshRoutes);
-router.use(imageRoutes);
 
 router.use(verifyJWT);
 router.get('/test', (req, res) => {res.status(200).json('OK')});
+router.use(userRouters);
 router.use(categoryRoutes);
 router.use(productRouters);
 router.use(tagRouters);

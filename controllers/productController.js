@@ -64,7 +64,6 @@ exports.updateProduct = async(req,res)=>{
         product.material=material;
         product.care= care;
         // product.images=images;
-        // product.posterImage=posterImage;
         product.quantity=quantity;
         product.description=description;
         product.tag=tag;
