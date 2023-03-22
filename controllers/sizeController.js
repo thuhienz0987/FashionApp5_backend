@@ -17,14 +17,14 @@ exports.postCreateSize = async(req,res)=>{
     }
 };
 
-exports.updateSize = async (req,res) =>{
+exports.updateSize = async (req,res) => {
     try{
         const _id= req.params._id;
         const name= req.body.name;
         const size= await Size.findById(_id);
         size.name= name;
 
-        const updateSize= await size.save();
+        const updateSize = await size.save();
         res.status(200).json({
             message: 'Size updated',
             size: updateSize
