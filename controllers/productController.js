@@ -103,7 +103,7 @@ exports.deleteProduct =async(req,res)=>{
 };
 
 exports.getAllProduct = async(req,res)=>{
-    Product.find()
+    Product.find({isDeleted: false})
     .then((result)=>{
         if (result.length === 0) throw new NotFoundError("No product found, please try again !"); 
         res.status(200).send(result);
@@ -114,7 +114,7 @@ exports.getAllProduct = async(req,res)=>{
 };
 
 exports.getRandomProduct = async(req,res)=>{
-    Product.find().limit(10)
+    Product.find({isDeleted : false}).limit(10)
     .then((result)=>{
         res.send(result);
     })
@@ -128,8 +128,10 @@ exports.getProductById = async(req,res)=>{
         
         const _id = req.params._id;
         const product = await Product.findById(_id);
-        if(product){
+        if(product && product.isDeleted===false) {
             res.status(200).json(product);
+        }else if(product && product.isDeleted===true){
+            res.status(410).send('Product is deleted');
         }
         else{
             throw new NotFoundError('Product not found');
@@ -144,12 +146,18 @@ exports.getProductByCategoryId= async(req,res)=>{
     try{
         const _id= req.params._id;
         const category = Category.findById(_id);
-        if (!category) throw new NotFoundError(`The category with _id ${_id} does not exists`);
-
-        const product = Product.find({categoryId: _id});
-        if (product.length === 0) throw new NotFoundError(`Not found product in category id ${_id}`);
+        if (!category ) throw new NotFoundError(`The product with category _id ${_id} does not exists`);
+        else if(category.isDeleted===true) {
+            res.status(410).send('Category is deleted');
+        }
+        else {
+            const product = Product.find({categoryId: _id});
+            if (product.length === 0) throw new NotFoundError(`Not found product in category id ${_id}`);
 
         res.status(200).json(product);
+        }
+
+        
     }
     catch(err){
         throw err
@@ -160,15 +168,28 @@ exports.getProductByTagId = async(req,res)=>{
     try{
         const _id = req.params._id;
         const tag = await Tag.findById(_id);
-        if (!tag) throw new NotFoundError(`The tag with _id ${_id} does not exists`);
-
+        if (!tag) throw new NotFoundError(`The product with tag _id ${_id} does not exists`);
+        else  if(tag.isDeleted===true) {
+            res.status(410).send('Tag is deleted');
+        }
+        else { 
         const product = await Product.find({tag: _id});
         if (product.length === 0) throw new NotFoundError(`Not found product in tag id ${_id}`);
-
         res.status(200).json(product);
+        }
+
     }
     catch(err){
         throw err;
     }
 };
 
+exports.getDeletedProduct = async(req,res)=>{
+    Product.find({isDeleted: true})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};

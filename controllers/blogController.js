@@ -52,8 +52,11 @@ exports.getBlogById= async(req,res)=>{
     try{
         const _id= req.params._id;
         const blog= await Blog.findById(_id);
-        if(blog){
+        if(blog&&blog.isDeleted===false){
             res.status(200).json(blog);
+        }
+        else if(blog&&blog.isDeleted===true){
+            res.status(410).send('Blog is deleted')
         }
         else{
             throw new NotFoundError('Blog not found');
@@ -65,7 +68,7 @@ exports.getBlogById= async(req,res)=>{
 };
 
 exports.getAllBlog = async(req,res)=>{
-    Blog.find()
+    Blog.find({isDeleted: false})
     .then((result)=>{
         res.send(result);
     })
@@ -128,7 +131,7 @@ exports.updateBlog= async(req,res)=>{
 exports.deleteBlog= async(req,res)=>{
     try{
         const _id= req.params._id;
-        const blog = await Blog.findByIdAndUpdate({_id},{isDeleted: true},);
+        const blog = await Blog.findByIdAndUpdate({_id},{isDeleted: true},{new: true});
         res.status(200).json({
             message: 'Delete blog successfully',
             blog: blog,
@@ -136,4 +139,14 @@ exports.deleteBlog= async(req,res)=>{
     }catch(err){
         throw err;
     }
+};
+
+exports.getDeletedBlog = async(req,res)=>{
+    Blog.find({isDeleted: true})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
 };
