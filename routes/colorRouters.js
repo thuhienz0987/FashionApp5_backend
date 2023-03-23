@@ -8,5 +8,6 @@ router.get('/get-color-by-id/:_id',colorController.getColorById);
 router.post('/post-create-color',colorController.postCreateColor);
 router.put('/put-update-color/:_id',colorController.updateColor);
 router.delete('/delete-color/:_id',colorController.deleteColor);
+router.get('/get-all-deleted-color',colorController.getDeletedColor);
 
 module.exports= router;

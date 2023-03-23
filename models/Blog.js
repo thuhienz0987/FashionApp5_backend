@@ -13,7 +13,7 @@ const blogSchema = new mongoose.Schema({
     description:{
         type: String,
         required: [true,'A blog have a description'],
-        maxLength: [255,'A description must have maximum of 255 character'],
+        maxLength: [1000,'A description must have maximum of 255 character'],
         minLength: [10,'A description must have minimum of 10 character'],
     },
     tag:[
@@ -26,6 +26,10 @@ const blogSchema = new mongoose.Schema({
     ],
     image: [
         {
+            public_id:{
+                type: String,
+                required: true,
+            },
             url:{
                 type: String,
                 required: true,
@@ -33,6 +37,10 @@ const blogSchema = new mongoose.Schema({
         }
     ],
     posterImage: {
+        public_id:{
+            type: String,
+            required: true,
+        },
         url:{
             type: String,
             required: true,

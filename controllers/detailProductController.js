@@ -27,7 +27,7 @@ exports.postCreateDetail = async (req,res)=>{
 };
 
 exports.getAllDetail = async(req,res)=>{
-    DetailProduct.find()
+    DetailProduct.find({isDeleted: false})
     .then((result)=>{
         res.send(result);
     })
@@ -41,8 +41,11 @@ exports.getDetailById = async(req,res)=>{
         const _id= req.params._id;
         const detailProduct= await DetailProduct.findById(_id);
 
-        if(detailProduct){
+        if(detailProduct&&detailProduct.isDeleted===false){
             res.status(200).json(detailProduct);
+        }
+        else if(detailProduct&&detailProduct.isDeleted===true){
+            res.status(410).send('Detail product is deleted');
         }
         else{
             throw new NotFoundError('Detail product not found');
@@ -91,7 +94,7 @@ exports.deleteDetail= async(req,res)=>{
         const product = await Product.findById(detail.productId);
         product.quantity -=detail.quantity;
         await product.save();
-        const detailProduct = await DetailProduct.findByIdAndUpdate({_id},{isDeleted: true},);
+        const detailProduct = await DetailProduct.findByIdAndUpdate({_id},{isDeleted: true},{new: true});
 
         
 
@@ -105,4 +108,14 @@ exports.deleteDetail= async(req,res)=>{
         throw err;
     }
 
+};
+
+exports.getDeletedDetailProduct = async(req,res)=>{
+    DetailProduct.find({isDeleted: true})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
 };

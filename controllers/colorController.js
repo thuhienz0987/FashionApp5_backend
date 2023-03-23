@@ -25,10 +25,6 @@ exports.updateColor = async (req,res) =>{
 
         const color= await Color.findById(_id);
         color.name= name;
-       
-        // if(name){
-        //     color.name= name;
-        // }
         const updateColor= await color.save();
         res.status(200).json({
             message: 'Color updated',
@@ -43,7 +39,7 @@ exports.updateColor = async (req,res) =>{
 exports.deleteColor= async(req,res)=>{
     try{
         const _id= req.params._id;
-        const color= await Color.findByIdAndUpdate({_id},{isDeleted: true},);
+        const color= await Color.findByIdAndUpdate({_id},{isDeleted: true},{new: true});
 
         res.status(200).json({
             message: 'Deleted Color successfully',
@@ -59,8 +55,11 @@ exports.getColorById = async(req,res)=>{
     try{
         const _id= req.params._id;
         const color= await Color.findById(_id);
-        if(color){
+        if(color&&color.isDeleted===false){
             res.status(200).json(color);
+        }
+        else if(color&&color.isDeleted===true){
+            res.status(410).send('Color is deleted')
         }
         else{
             throw new NotFoundError('Color not found');
@@ -72,7 +71,17 @@ exports.getColorById = async(req,res)=>{
 };
 
 exports.getAllColor= async(req,res)=>{
-    Color.find()
+    Color.find({isDeleted: false})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
+
+exports.getDeletedColor = async(req,res)=>{
+    Color.find({isDeleted: true})
     .then((result)=>{
         res.send(result);
     })

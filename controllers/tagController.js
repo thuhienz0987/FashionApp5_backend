@@ -48,7 +48,7 @@ exports.updateTag = async (req,res) =>{
 exports.deleteTag= async(req,res)=>{
     try{
         const _id= req.params._id;
-        const tag= await Tag.findByIdAndUpdate({_id},{isDeleted: true},);
+        const tag= await Tag.findByIdAndUpdate({_id},{isDeleted: true},{new: true});
 
         res.status(200).json({
             message: 'Deleted Tag successfully',
@@ -64,8 +64,11 @@ exports.getTagById = async(req,res)=>{
     try{
         const _id= req.params._id;
         const tag= await Tag.findById(_id);
-        if(tag){
+        if(tag&&tag.isDeleted===false){
             res.status(200).json(tag);
+        }else if(tag&&tag.isDeleted===true)
+        {
+            res.status(410).send('Tag is deleted');
         }
         else{
             throw new NotFoundError('Tag not fond');
@@ -77,7 +80,16 @@ exports.getTagById = async(req,res)=>{
 };
 
 exports.getAllTag= async(req,res)=>{
-    Tag.find()
+    Tag.find({isDeleted: false})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};
+exports.getDeletedTag = async(req,res)=>{
+    Tag.find({isDeleted: true})
     .then((result)=>{
         res.send(result);
     })

@@ -16,6 +16,7 @@ router.put('/put-update-product/:_id',uploads.array('imageProduct',4),  productC
 router.delete('/delete-product/:_id', productController.deleteProduct);
 router.get('/get-product-by-category-id/:_id',productController.getProductByCategoryId);
 router.get('/get-product-by-tag-id/:_id',productController.getProductByTagId);
+router.get('/get-all-deleted-product',productController.getDeletedProduct);
 
 
 module.exports = router;
