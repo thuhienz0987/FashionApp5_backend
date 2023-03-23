@@ -38,12 +38,17 @@ const userSchema = new mongoose.Schema({
     },
     emailVerified: {
         type: Boolean,
-        require: true,
+        required: [true, 'Your email has not been verified yet, please verify your email to use our app'],
         default: false
     },
     refreshToken: {
         type: String
     },
+    avatarImage: {
+        type: String,
+        default: 'https://res.cloudinary.com/dux8aqzzz/image/upload/v1679140863/default-avatar_zr8hja.png',
+        required: true
+    }
 },
     { timestamps: true }
 );

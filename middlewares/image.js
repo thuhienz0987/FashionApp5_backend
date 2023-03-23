@@ -9,5 +9,10 @@ const fileFilter = (req, file, cb) => {
         cb('invalid image file!', false);
     }
 };
-const uploads = multer({ storage, fileFilter });
+
+const limits = {
+    fileSize: 1024 * 1024 * 1.5
+};
+
+const uploads = multer({ storage, limits: limits, fileFilter: fileFilter });
 module.exports = uploads;
