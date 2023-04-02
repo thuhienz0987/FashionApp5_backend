@@ -16,11 +16,12 @@ const productRouters = require('./routes/productRouters');
 const verifyJWT = require('./middlewares/verifyJWT');
 
 const app = express();
-
+const port = process.env.port||3000;
 // Connect to database
+mongoose.set('strictQuery',false);
 connectDB();
 mongoose.connection.once('open', () => {
-    app.listen(3000);
+    app.listen(port);
 });
 
 // Handle options credentials check - before CORS!

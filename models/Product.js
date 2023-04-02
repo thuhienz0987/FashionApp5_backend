@@ -4,6 +4,10 @@ const productSchema= new mongoose.Schema({
     name:{
         type: String,
         required: [true,'A product must have a name'],
+        maxLength: [100,'A product name have maximum of 100 character'],
+        minLength: [1,'A product name must have minimum of 1 character'],
+        unique: [true,'A name of product with the same name has already exists'],
+        trim: true,
     },
     price:{
         type: Number,
@@ -12,14 +16,14 @@ const productSchema= new mongoose.Schema({
     material:{
         type: String,
         required: [true,'A product must have a material'],
-        maxLength: [255,'A material must have maximum of 255 character'],
-        minLength: [10,'A material must have minimum of 10 character'],
+        maxLength: [500,'A material must have maximum of 500 character'],
+        minLength: [5,'A material must have minimum of 5 character'],
     },
     care:{
         type: String,
         required: [true,'A product must have a care'],
-        maxLength: [255,'A material must have maximum of 255 character'],
-        minLength: [10,'A material must have minimum of 10 character'],
+        maxLength: [500,'A care must have maximum of 500 character'],
+        minLength: [5,'A care must have minimum of 5 character'],
     },
     image: [
         {
@@ -63,7 +67,6 @@ const productSchema= new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Tag',
             required: [true,'A product must have a tag']
-
         },
     ],
     isDeleted:{
@@ -72,8 +75,15 @@ const productSchema= new mongoose.Schema({
         default: false,
     }
 
-
 },{timestamps: true});
+
+productSchema.path('tag').validate(function (value) {
+    console.log(value.length)
+    if (value.length > 3) {
+      throw new Error("tag size can't be greater than 3!");
+    }
+  });
+  
 
 // productSchema.index({name: 'text', categoryId: 'text',tag: 'text'})
 

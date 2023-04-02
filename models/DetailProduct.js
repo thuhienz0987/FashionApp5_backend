@@ -15,6 +15,7 @@ const detailProduct = mongoose.Schema({
         type: Number,
         default: 0,
         required: true,
+
     },
     productId:{
         type: mongoose.Types.ObjectId,
