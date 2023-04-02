@@ -4,7 +4,11 @@ const colorSchema = mongoose.Schema({
     name:{
         type: String,
         required: [true,'A color must have a name'],
-        unique: true
+        unique: [true,'A name of color with the same name has already exists'],
+        maxLength: [100,'A name of color have maximum of 100 character'],
+        minLength: [1,'A name of color must have minimum of 1 character'],
+        trim: true,
+
     },
     isDeleted:{
         type: Boolean,

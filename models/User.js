@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        unique: true,
+        unique: [true,'A email with the same name has already exists'],
         trim: true,
         lowercase: true,
         validate(value) {
@@ -31,7 +31,9 @@ const userSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        required: [true, 'Please tell us your phone number']
+        required: [true, 'Please tell us your phone number'],
+        minLength: [9, 'Please check your phone number'],
+        maxLength: [11, 'Please check your phone number']
     },
     profileImage: {
         type: String
