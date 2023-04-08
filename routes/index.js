@@ -16,6 +16,7 @@ const colorRouters= require('./colorRouters');
 const detailProductRouters= require('./detailProductRouters');
 const blogRouters = require('./blogRouters');
 const userRouters = require('./userRoutes');
+const collectionRouters= require('./collectionRouters');
 
 
 const router = Router();
@@ -36,6 +37,7 @@ router.use(sizeRouters);
 router.use(colorRouters);
 router.use(detailProductRouters);
 router.use(blogRouters);
+router.use(collectionRouters);
 
 
 

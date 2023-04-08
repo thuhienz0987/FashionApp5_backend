@@ -5,6 +5,8 @@ const cloudinary= require('../helper/imageUpload');
 const { url } = require('../helper/imageUpload');
 
 
+//upload array image use cloudinary 
+
 const cloudinaryImageUploadMethod = async file => {
     return new Promise(resolve => {
         cloudinary.uploader.upload( file , (err, res) => {
@@ -21,7 +23,7 @@ const cloudinaryImageUploadMethod = async file => {
 exports.postCreateProduct =async(req,res)=>{
     
     try{
-        const {title, detail,description,tag,}= req.body;
+        const {title, detail,description,tag}= req.body;
         let image = [];
         const files = req.files;
         for (const file of files) {
@@ -29,7 +31,7 @@ exports.postCreateProduct =async(req,res)=>{
           const newPath = await cloudinaryImageUploadMethod(path);
           image.push({url: newPath.res, public_id: newPath.public_id});
         }
-                const blog = new Blog({
+        const blog = new Blog({
             title,
             detail,
             description,
@@ -78,7 +80,7 @@ exports.getAllBlog = async(req,res)=>{
 };
 
 exports.getRandomBlog = async(req,res)=>{
-    Blog.find().limit(4)
+    Blog.find({isDeleted: false}).limit(4)
     .then((result)=>{
         res.send(result);
     })
@@ -105,7 +107,7 @@ exports.updateBlog= async(req,res)=>{
         for(let i=0;i< blog.image.length;i++){
             image.push(blog.image[i].public_id);
         }
-
+        //delete image from cloudinary
         cloudinary.api.delete_resources(image,function(err,result){
             console.log(result);
         });
