@@ -7,6 +7,9 @@ const passwordValidator = require('password-validator');
 const { generateOTP, mailTransport, OtpTemplate, verifiedTemplate } = require('../utils/mail');
 const { isValidObjectId } = require('mongoose');
 const NotFoundError = require('../errors/notFoundError');
+const { createCart } = require('./cartController');
+const InternalServerError = require('../errors/internalServerError');
+const { initAddress } = require('./addressController');
 
 
 // init password validator
@@ -40,6 +43,13 @@ module.exports.signup_post = async (req, res) => {
             phoneNumber
         })
 
+        // create cart
+        const cart = createCart(newUser._id);
+        if (!cart) throw new InternalServerError("Something goes wrong while create cart, please try again");
+
+        // init user address
+        const address = initAddress(newUser._id);
+        if (!address) throw new InternalServerError("Something goes wrong while init address, please try again");
         // generate verification otp
         const OTP = generateOTP();
         const newVerificationToken = new VerificationToken({
@@ -57,6 +67,7 @@ module.exports.signup_post = async (req, res) => {
             subject: 'Verify your email account',
                 html: OtpTemplate(OTP),
         });
+
         res.status(201).json({ 'success': true,'message': `New user ${user} created!` });
     }
     catch (err) {

@@ -62,9 +62,9 @@ const blogSchema = new mongoose.Schema({
 blogSchema.path('tag').validate(function (value) {
     console.log(value.length)
     if (value.length > 3) {
-      throw new Error("tag size can't be greater than 3!");
+        throw new Error("tag size can't be greater than 3!");
     }
-  });
+});
 
 const Blog = mongoose.model('Blog', blogSchema);
 module.exports= Blog;
