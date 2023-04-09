@@ -20,7 +20,7 @@ const cloudinaryImageUploadMethod = async file => {
 exports.postCreateProduct = async (req,res)=>{
     
     try{
-    const {name,price,material,care,quantity,description,tag,categoryId}= req.body;
+    const {name,price,material,care,quantity,description,tag,categoryId} = req.body;
 
         let image = [];
         const files = req.files;
