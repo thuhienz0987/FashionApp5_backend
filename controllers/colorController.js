@@ -71,7 +71,7 @@ exports.getColorById = async(req,res)=>{
 };
 
 exports.getAllColor= async(req,res)=>{
-    Color.find({isDeleted: false})
+    await Color.find({isDeleted: false})
     .then((result)=>{
         res.send(result);
     })
