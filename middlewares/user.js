@@ -1,7 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 const BadRequestError = require("../errors/badRequestError");
 const NotFoundError = require("../errors/notFoundError");
-const ResetToken = require("../models/resetToken");
+const ResetToken = require("../models/ResetToken");
 const User = require("../models/User");
 
 exports.isValidResetToken = async (req, res, next) => {
