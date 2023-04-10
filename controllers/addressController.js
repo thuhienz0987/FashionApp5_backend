@@ -36,7 +36,7 @@ module.exports.getAddressByUserId = async (req, res) => {
 module.exports.editAddresses = async (req, res) => {
     try {
         const { addresses } = req.body;
-        const _id = req.params; // (cart id)
+        const _id = req.params; 
         const address = await Address.findById(_id);
 
         // check if exist
@@ -56,7 +56,7 @@ module.exports.editAddresses = async (req, res) => {
 module.exports.addNewAddress = async (req, res) => {
     try {
         const { addressObject } = req.body;
-        const _id = req.params; // (cart id)
+        const _id = req.params; 
         const address = await Address.findById(_id);
 
         // check if exist
