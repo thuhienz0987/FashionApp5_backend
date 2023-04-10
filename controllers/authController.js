@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const BadRequestError = require('../errors/badRequestError');
 const ForbiddenError = require('../errors/forbiddenError');
 const NotFoundError = require('../errors/notFoundError');
-const ResetToken = require('../models/resetToken');
+const ResetToken = require('../models/ResetToken');
 
 const { createRandomBytes } = require('../utils/helper');
 const { mailTransport, forgetPasswordTemplate, passwordResetTemplate } = require('../utils/mail');
