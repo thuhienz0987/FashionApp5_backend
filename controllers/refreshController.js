@@ -29,7 +29,9 @@ const handleRefreshToken = async (req, res) => {
 
             const accessToken = jwt.sign(
                 {
-                    "userId": user._id
+                    "userInfo": {
+                        "userId": user._id,
+                    }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: maxAgeAccessToken }
