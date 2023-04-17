@@ -103,21 +103,6 @@ exports.deleteProduct =async(req,res)=>{
     }
 };
 
-// exports.getAllProduct = async(req,res)=>{
-//     const queryObj ={...req.query};
-//     console.log(queryObj)
-//     // console.log(req.query);
-//     await Product.find(req.query,{isDeleted: false})
-//     .then((result)=>{
-//         if (result.length === 0) throw new NotFoundError("No product found, please try again !"); 
-//         res.status(200).send(result);
-//     })
-//     .catch((err)=>{
-//         throw err;
-//     })
-// };
-
-
 exports.getAllProduct = async(req,res)=>{
 
     //filtering
@@ -155,6 +140,7 @@ exports.getAllProduct = async(req,res)=>{
     // await Product.find(JSON.parse(queryStr),{isDeleted: false})
     query
     .then((result)=>{
+        console.log(result.length);
         if (result.length === 0) throw new NotFoundError("No product found, please try again !"); 
         res.status(200).send(result);
     })
@@ -245,3 +231,44 @@ exports.getDeletedProduct = async(req,res)=>{
         throw err;
     })
 };
+
+exports.getProductByMultipleTagId = async(req,res)=>{
+    try{
+        const tags = req.query.tags;
+        const product = await Product.find({ tag: { $in: tags } });
+        if (product.length === 0) throw new NotFoundError(`Not found product`);
+        res.status(200).json(product);
+    }
+    catch(err){
+        throw err;
+    }
+};
+
+
+exports.getNameTagByProductId = async(req,res)=>{
+        try{
+            
+            const _id = req.params._id;
+            console.log(_id);
+            const product = await Product.findById(_id);
+            if(product && product.isDeleted===false) {
+                const tagIds=product.tag;
+
+                Tag.find({_id: { $in: tagIds  }}).select('_id name')
+                    .then((tags) => {
+                        res.status(200).json(tags);
+                    })
+                    .catch((err) => {
+                        throw err;
+                    });
+            }else if(product && product.isDeleted===true){
+                res.status(410).send('Product is deleted');
+            }
+            else{
+                throw new NotFoundError('Product not found');
+            }
+        }
+        catch(err){
+            throw err;
+        }
+    };

@@ -1,10 +1,11 @@
-const Color = require('../models/Color');
+const Color = require('../models/color')
 
 exports.postCreateColor = async (req,res)=>{
     try{
         const name = req.body.name;
+        const code= req.body.code;
         const color = new Color({
-            name,
+            name,code
         });
 
         await color.save();
@@ -22,9 +23,11 @@ exports.updateColor = async (req,res) =>{
     try{
         const _id= req.params._id;
         const name= req.body.name;
+        const code= req.body.code;
 
         const color= await Color.findById(_id);
         color.name= name;
+        color.code=code;
         const updateColor= await color.save();
         res.status(200).json({
             message: 'Color updated',

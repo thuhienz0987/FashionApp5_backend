@@ -10,6 +10,14 @@ const colorSchema = mongoose.Schema({
         trim: true,
 
     },
+    code:{
+        type: String,
+        required: [true,'A color must have a code'],
+        unique: [true,'A code of color with the same name has already exists'],
+        maxLength: [10,'A code of color have maximum of 10 character'],
+        minLength: [1,'A code of color must have minimum of 1 character'],
+        trim: true,
+    },
     isDeleted:{
         type: Boolean,
         required: true,

@@ -119,3 +119,24 @@ exports.getDeletedDetailProduct = async(req,res)=>{
         throw err;
     })
 };
+
+
+exports.getDetailProductByProductId = async(req,res)=>{
+    try{
+        const _id = req.params._id;
+        const product = await Product.findById(_id);
+        if (!product) throw new NotFoundError(`The Detail product with product _id ${_id} does not exists`);
+        else  if(product.isDeleted===true) {
+            res.status(410).send('product is deleted');
+        }
+        else { 
+        const detail = await DetailProduct.find({productId: _id});
+        if (detail.length === 0) throw new NotFoundError(`Not found detail product in product id ${_id}`);
+        res.status(200).json(detail);
+        }
+
+    }
+    catch(err){
+        throw err;
+    }
+};
