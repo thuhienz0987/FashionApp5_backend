@@ -17,6 +17,8 @@ router.delete('/delete-product/:_id', productController.deleteProduct);
 router.get('/get-product-by-category-id/:_id',productController.getProductByCategoryId);
 router.get('/get-product-by-tag-id/:_id',productController.getProductByTagId);
 router.get('/get-all-deleted-product',productController.getDeletedProduct);
+router.get('/get-product-by-multiple-tag-id', productController.getProductByMultipleTagId);
+router.get('/get-name-tag-by-productId/:_id',productController.getNameTagByProductId);
 
 
 module.exports = router;

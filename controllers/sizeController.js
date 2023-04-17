@@ -3,8 +3,11 @@ const Size = require('../models/Size');
 exports.postCreateSize = async(req,res)=>{
     try{
         const name = req.body.name;
+        const width = req.body.width;
+        const length = req.body.length;
+
         const size= new Size({
-            name,
+            name,width,length
         });
         await size.save();
         res.status(201).json({
@@ -21,8 +24,12 @@ exports.updateSize = async (req,res) => {
     try{
         const _id= req.params._id;
         const name= req.body.name;
+        const width = req.body.width;
+        const length = req.body.length;
         const size= await Size.findById(_id);
         size.name= name;
+        size.width=width;
+        size.length=length;
 
         const updateSize = await size.save();
         res.status(200).json({

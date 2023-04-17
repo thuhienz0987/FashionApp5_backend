@@ -68,7 +68,7 @@ module.exports.cancelOrder = async (req, res) => {
         const order = await Order.findById(_id);
         if (!order) throw new NotFoundError("No order found with the Id");
 
-        if (!(order.status === "in progress" || order.status === "in progress")) 
+        if (!(order.status === "in progress" || order.status === "new")) 
             throw new BadRequestError("Order can only be cancel if it is new or in progress");
 
         order.status = "cancel";

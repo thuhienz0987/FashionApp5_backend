@@ -9,5 +9,6 @@ router.post('/post-create-detail',detailProductController.postCreateDetail);
 router.put('/put-update-detail/:_id',detailProductController.putUpdateDetail);
 router.delete('/delete-detail/:_id',detailProductController.deleteDetail);
 router.get('/get-all-deleted-detail',detailProductController.getDeletedDetailProduct);
+router.get('/get-detail-by-productId/:_id',detailProductController.getDetailProductByProductId);
 
 module.exports= router;
