@@ -1,4 +1,4 @@
-const mongoose= require('mongoose');
+const mongoose = require('mongoose');
 
 const colorSchema = mongoose.Schema({
     name:{
@@ -25,5 +25,5 @@ const colorSchema = mongoose.Schema({
     },
 },{timestamps: true});
 
-const Color = mongoose.model('Color',colorSchema);
+const Color = mongoose.model('Color', colorSchema);
 module.exports= Color;

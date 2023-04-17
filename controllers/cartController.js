@@ -53,7 +53,7 @@ module.exports.resetProductOfCart = async (req, res) => {
     }
 };
 
-module.exports.editCart = async (req, res) => {
+module.exports. editCart = async (req, res) => {
     try {
         const { productDetails } = req.body;
         const { _id } = req.params; // (cart id)
