@@ -1,4 +1,4 @@
-const Color = require('../models/color')
+const Color = require('../models/Color')
 
 exports.postCreateColor = async (req,res)=>{
     try{
