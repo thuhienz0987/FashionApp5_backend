@@ -50,3 +50,14 @@ module.exports.edit_user_profile = async (req, res) => {
     }
     catch (err) {throw err;}
 };
+
+
+module.exports.get_user_profile = async (req, res) => {
+    User.find({isDeleted: false})
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+}

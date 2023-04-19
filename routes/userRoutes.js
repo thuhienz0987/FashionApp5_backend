@@ -5,5 +5,6 @@ const uploads = require('../middlewares/image');
 const router = Router();
 
 router.post('/user/:_id', uploads.single('avatarImage'), userController.edit_user_profile);
+router.get('/get-all-user',userController.get_user_profile);
 
 module.exports = router;

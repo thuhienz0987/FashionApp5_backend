@@ -15,6 +15,14 @@ exports.postCreateColor = async (req,res)=>{
         });
     }
     catch(err){
+        if (err.code === 11000 && err.keyValue.name) {
+            const message = `${err.keyValue.name} has already existed`;
+            console.log(message);
+            res.status(400).json({
+              error: message,
+            });
+          } 
+            
         throw err;
     }
 };

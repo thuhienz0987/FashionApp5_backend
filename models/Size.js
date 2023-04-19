@@ -14,7 +14,7 @@ const sizeSchema = mongoose.Schema({
         required: [true,'A size must have a width'],
         trim: true,
     },
-    Length:{
+    length:{
         type: Number,
         required: [true,'A size must have a length'],
         trim: true,
