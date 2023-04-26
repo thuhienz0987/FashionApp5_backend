@@ -50,3 +50,30 @@ module.exports.edit_user_profile = async (req, res) => {
     }
     catch (err) {throw err;}
 };
+
+module.exports.get_all_user = async (req, res) => {
+    User.find()
+    .then((result)=>{
+        let handledResult = result.map(item => {
+            item.password = undefined;
+            return item
+        })
+        res.send(handledResult);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+}
+
+module.exports.get_user_by_id = async (req, res) => {
+    try {
+        const id = req.params._id;
+        const user = await User.findById(id);
+        if ( !user ) throw new NotFoundError('User not found');
+        user.password = undefined;
+        res.status(200).json({status: 'Success', user: user})
+    }
+    catch (err) {
+        throw err
+    }
+}
