@@ -47,12 +47,12 @@ const collectionSchema = new mongoose.Schema({
         default: false
     },
 });
-collectionSchema.path('productId').validate(function (value) {
-    console.log(value.length)
-    if (value.length > 10) {
-      throw new Error("product amount less than 10!");
-    }
-  });
+// collectionSchema.path('productId').validate(function (value) {
+//     console.log(value.length)
+//     if (value.length > 10) {
+//       throw new Error("product amount less than 10!");
+//     }
+//   });
 
 const Collection = mongoose.model('Collection', collectionSchema);
 module.exports= Collection;
