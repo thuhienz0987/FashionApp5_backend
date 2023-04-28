@@ -1,6 +1,7 @@
 const Category = require('../models/Category');
 const mongoose = require('mongoose');
 const NotFoundError = require('../errors/internalServerError');
+const InternalServerError = require('../errors/internalServerError');
 
 module.exports.get_all_category = async (req, res) => {
     Category.find({isDeleted: false})
@@ -80,3 +81,20 @@ module.exports.delete_category = async (req, res) => {
         throw err;
     }
 };
+
+module.exports.get_child_category = async (req, res) => {
+    try {
+        const result = await Category.find({ parentId: { $ne: undefined } });
+        if ( !result ) throw new NotFoundError('Not found any category');
+        let categoryWithParentName = []
+        await Promise.all(result.map(async(item) => {
+            const parent = await Category.findById(item.parentId);
+            if ( !parent ) throw new InternalServerError('Something went wrong when access parentId');
+            categoryWithParentName.push({...item._doc, parentName: parent.name});
+        }))
+        res.status(200).json({category: categoryWithParentName})
+    }
+    catch (err) {
+        throw err
+    }
+}
