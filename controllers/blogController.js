@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 const Tag= require('../models/Tag');
 const cloudinary= require('../helper/imageUpload');
 const { url } = require('../helper/imageUpload');
+const NotFoundError = require('../errors/notFoundError');
 
 
 //upload array image use cloudinary 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const detailProduct = mongoose.Schema({
+const productDetail = mongoose.Schema({
     sizeId:{
         type: mongoose.Types.ObjectId,
         ref: 'Size',
@@ -29,7 +29,7 @@ const detailProduct = mongoose.Schema({
     },
 });
 
-const DetailProduct = mongoose.model('DetailProduct',detailProduct);
+const ProductDetail = mongoose.model('ProductDetail',productDetail);
 
-module.exports= DetailProduct;
+module.exports= ProductDetail;
 

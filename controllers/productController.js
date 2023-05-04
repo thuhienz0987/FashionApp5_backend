@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 const Tag= require('../models/Tag');
 const cloudinary = require('../helper/imageUpload');
 const NotFoundError = require('../errors/notFoundError');
+const NotFoundError = require('../errors/notFoundError');
 const { query } = require('express');
 
 const cloudinaryImageUploadMethod = async file => {
