@@ -1,3 +1,4 @@
+const NotFoundError = require('../errors/notFoundError');
 const Color = require('../models/Color')
 
 exports.postCreateColor = async (req,res)=>{

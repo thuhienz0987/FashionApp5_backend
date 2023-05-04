@@ -1,6 +1,6 @@
 const BadRequestError = require('../errors/badRequestError');
 const Order = require('../models/Order');
-const DetailProduct = require('../models/DetailProduct');
+const DetailProduct = require('../models/ProductDetail');
 const Product = require('../models/Product');
 const NotFoundError = require('../errors/notFoundError');
 const { createShipment, finishShipment } = require('./shipmentController');

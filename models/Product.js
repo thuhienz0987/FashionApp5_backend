@@ -56,6 +56,8 @@ const productSchema= new mongoose.Schema({
     description:{
         type: String,
         required: [true,'A product must have a description'],
+        maxLength: [500,'A description must have maximum of 500 character'],
+        minLength: [5,'A description must have minimum of 5 character'],
     },
     categoryId:{
         type: mongoose.Types.ObjectId,

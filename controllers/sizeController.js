@@ -1,4 +1,5 @@
 const Size = require('../models/Size');
+const NotFoundError = require('../errors/notFoundError');
 
 exports.postCreateSize = async(req,res)=>{
     try{

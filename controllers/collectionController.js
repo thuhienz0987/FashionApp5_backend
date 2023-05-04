@@ -1,7 +1,7 @@
 const Collection = require('../models/Collection');
 const cloudinary= require('../helper/imageUpload');
 const { url} = require('../helper/imageUpload');
-
+const NotFoundError = require('../errors/notFoundError');
 
 //upload array image use cloudinary 
 const cloudinaryImageUploadMethod = async file => {

@@ -1,4 +1,5 @@
 const Tag = require('../models/Tag');
+const NotFoundError = require('../errors/notFoundError');
 
 exports.postCreateTag = async (req,res)=>{
     try{
