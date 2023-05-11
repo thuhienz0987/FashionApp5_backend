@@ -1,9 +1,8 @@
 const ProductDetail = require("../models/ProductDetail");
 const Product = require("../models/Product");
-const NotFoundError = require('../errors/notFoundError');
+const NotFoundError = require("../errors/notFoundError");
 const Color = require("../models/Color");
-const Size= require("../models/Size");
-
+const Size = require("../models/Size");
 
 exports.postCreateDetail = async (req, res) => {
   try {
@@ -141,38 +140,51 @@ exports.getDetailProductByProductId = async (req, res) => {
 };
 
 exports.postCreateMultipleDetail = async (req, res) => {
-    try {
-      const { colorId, productId, sizeQuantity } = req.body;
-      const product = await Product.findById(productId);
-      const color = await Color.findById(colorId);
-      if (!product) throw new NotFoundError("ProductId not found");
-      if(!color) throw new NotFoundError("ColorId not found");
-      if (product.isDeleted) throw new NotFoundError("Product has been deleted");
-      
-      const productDetails = await Promise.all(sizeQuantity.map( async({ sizeId, quantity }) => {
-        console.log(sizeId)
-        const size= await Size.findById(sizeId)
-        if(!size) throw new NotFoundError("sizeId not found")
+  try {
+    const { colorId, productId, sizeQuantity } = req.body;
+    const product = await Product.findById(productId);
+    const color = await Color.findById(colorId);
+    if (!product) throw new NotFoundError("ProductId not found");
+    if (!color) throw new NotFoundError("ColorId not found");
+    if (product.isDeleted) throw new NotFoundError("Product has been deleted");
+
+    const productDetails = await Promise.all(
+      sizeQuantity.map(async ({ sizeId, quantity }) => {
+        const p = await ProductDetail.findOne({
+          productId: productId,
+          colorId: colorId,
+          sizeId: sizeId,
+        });
+        if (p) throw new NotFoundError("Detail exists");
+
+        console.log(sizeId);
+        const size = await Size.findById(sizeId);
+        if (!size) throw new NotFoundError("sizeId not found");
+        if(typeof quantity==='string'){
+          quantity=+quantity;
+        }
         return new ProductDetail({
           colorId,
           sizeId: sizeId,
           quantity: quantity,
+
           productId,
         });
-      }));
-       
-      await ProductDetail.insertMany(productDetails);
-  
-      product.quantity += sizeQuantity.reduce(
-        (total, { quantity }) => total + quantity,
-        0
-      );
-      await product.save();
-  
-      res.status(201).json({
-        message: "Multiple detail product created successfully",
-      });
-    } catch (err) {
-      throw err;
-    }
-  };
+      })
+    );
+
+    await ProductDetail.insertMany(productDetails);
+
+    product.quantity += sizeQuantity.reduce(
+      (total, { quantity }) => total + quantity,
+      0
+    );
+    await product.save();
+
+    res.status(201).json({
+      message: "Multiple detail product created successfully",
+    });
+  } catch (err) {
+    throw err;
+  }
+};

@@ -9,5 +9,6 @@ router.post('/post-create-tag',tagController.postCreateTag);
 router.put('/put-update-tag/:_id',tagController.updateTag);
 router.delete('/delete-tag/:_id',tagController.deleteTag);
 router.get('/get-all-deleted-tag', tagController.getDeletedTag);
+router.get('/get-random-tag/:number',tagController.getRandomTag);
 
 module.exports= router;

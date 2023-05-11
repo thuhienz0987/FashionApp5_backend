@@ -5,7 +5,7 @@ const uploads = require('../middlewares/image');
 const router=  Router();
 
 router.get('/get-all-collection',collectionController.getAllCollection);
-router.get('/get-random-collection',collectionController.getRandomCollection);
+router.get('/get-random-collection/:number',collectionController.getRandomCollection);
 router.get('/get-collection-by-id/:_id',collectionController.getCollectionById);
 router.post('/post-create-collection',uploads.array('imageCollection',1), collectionController.postCreateCollection);
 router.put('/put-update-collection/:_id',uploads.array('imageCollection',1),collectionController.updateCollection);

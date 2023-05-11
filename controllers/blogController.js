@@ -81,7 +81,8 @@ exports.getAllBlog = async(req,res)=>{
 };
 
 exports.getRandomBlog = async(req,res)=>{
-    Blog.find({isDeleted: false}).limit(4)
+    const number = req.params.number
+    Blog.find({isDeleted: false}).limit(number)
     .then((result)=>{
         res.send(result);
     })
