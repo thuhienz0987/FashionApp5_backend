@@ -98,3 +98,15 @@ exports.getDeletedTag = async(req,res)=>{
         throw err;
     })
 };
+
+exports.getRandomTag = async(req,res)=>{
+ 
+    const number = req.params.number
+    await Tag.find({isDeleted : false}).limit(number)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        throw err;
+    })
+};

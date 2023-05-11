@@ -76,7 +76,8 @@ exports.getAllCollection= async(req,res)=>{
 },
 
 exports.getRandomCollection = async(req,res)=>{
-    Collection.find({isDeleted: false}).limit(4)
+    const number= req.params.number
+    Collection.find({isDeleted: false}).limit(number)
     .then((result)=>{
         res.status(200).send(result);
     })

@@ -9,7 +9,7 @@ const router = Router();
 
 // product 
 router.get('/get-all-product',productController.getAllProduct);
-router.get('/get-random-product',productController.getRandomProduct);
+router.get('/get-random-product/:number',productController.getRandomProduct);
 router.get('/get-product-by-id/:_id', productController.getProductById);
 router.post('/post-create-product',uploads.array('imageProduct',5), productController.postCreateProduct);
 router.put('/put-update-product/:_id',uploads.array('imageProduct',5),  productController.updateProduct);

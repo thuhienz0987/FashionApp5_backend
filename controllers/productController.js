@@ -152,7 +152,8 @@ exports.getAllProduct = async(req,res)=>{
 
 exports.getRandomProduct = async(req,res)=>{
  
-    await Product.find({isDeleted : false}).limit(10)
+    const number = req.params.number
+    await Product.find({isDeleted : false}).limit(number)
     .then((result)=>{
         res.send(result);
     })
