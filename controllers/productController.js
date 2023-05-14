@@ -152,8 +152,7 @@ exports.getAllProduct = async(req,res)=>{
 
 exports.getRandomProduct = async(req,res)=>{
  
-    const number = req.params.number
-    await Product.find({isDeleted : false}).limit(number)
+    await Product.find({isDeleted : false}).limit(10)
     .then((result)=>{
         res.send(result);
     })
@@ -190,7 +189,7 @@ exports.getProductByCategoryId= async(req,res)=>{
             res.status(410).send('Category is deleted');
         }
         else {
-            const product = Product.find({categoryId: _id});
+            const product = await Product.find({categoryId: _id});
             if (product.length === 0) throw new NotFoundError(`Not found product in category id ${_id}`);
 
         res.status(200).json(product);
