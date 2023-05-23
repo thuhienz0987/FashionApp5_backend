@@ -40,6 +40,9 @@ app.use(express.json());
 // Middleware for cookies
 app.use(cookieParser());
 
+// view engine
+app.set('view engine', 'ejs');
+
 // serve static files
 app.use(express.static('public'));
 
