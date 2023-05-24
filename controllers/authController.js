@@ -37,7 +37,7 @@ const handleErrors = (err) => {
 };
 
 // define max age of JWT
-const maxAgeAccessToken = 15 * 60;
+const maxAgeAccessToken = 60 * 60;
 const maxAgeRefreshToken = 60 * 60 * 24 * 30 * 6;
 
 module.exports.login_post = async (req, res) => {
