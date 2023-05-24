@@ -11,6 +11,7 @@ router.post('/login', authController.login_post);
 router.get('/logout', authController.logout_post);
 
 router.post('/forget-password', authController.forget_password);
+router.get('/favicon.ico', ()=>{});
 
 router.get('/reset-password', (req, res) => res.render('resetPassword', {
     token: req.query.token,
