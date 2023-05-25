@@ -17,7 +17,7 @@ const cloudinaryImageUploadMethod = async (file) => {
   });
 };
 
-(exports.postCreateProduct = async (req, res) => {
+exports.postCreateProduct = async (req, res) => {
   try {
     const {
       name,
@@ -57,71 +57,76 @@ const cloudinaryImageUploadMethod = async (file) => {
   } catch (err) {
     throw err;
   }
-}),
-  (exports.updateProduct = async (req, res) => {
-    try {
-      const _id = req.params._id;
-      const {
-        name,
-        price,
-        material,
-        care,
-        description,
-        tag,
-        categoryId,
-        oldImage,
-      } = req.body;
-      let oldImageArray = [];
-      if (!Array.isArray(oldImage)) oldImageArray.push(oldImage);
-      else oldImageArray = oldImage;
-      let imageUpdate = [];
-      const files = req.files;
-      for (const file of files) {
-        const { path } = file;
-        const newPath = await cloudinaryImageUploadMethod(path);
-        imageUpdate.push({ url: newPath.res, public_id: newPath.public_id });
-      }
+},
+exports.updateProduct = async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const {
+      name,
+      price,
+      material,
+      care,
+      description,
+      tag,
+      categoryId,
+      oldImage,
+    } = req.body;
+    let oldImageArray = [];
+    if (!Array.isArray(oldImage)) oldImageArray.push(oldImage);
+    else oldImageArray = oldImage;
+    let imageUpdate = [];
+    const files = req.files;
+    for (const file of files) {
+      const { path } = file;
+      const newPath = await cloudinaryImageUploadMethod(path);
+      imageUpdate.push({ url: newPath.res, public_id: newPath.public_id });
+    }
 
-      const product = await Product.findById(_id);
-      let deleteImage = [];
-      for (let i = 0; i < product.image.length; i++) {
-        const isNotDelete = oldImageArray.filter((element) => {
-          return element === product.image[i].public_id;
+    const product = await Product.findById(_id);
+    let deleteImage = [];
+    for (let i = 0; i < product.image.length; i++) {
+      const isNotDelete = oldImageArray.filter((element) => {
+        return element === product.image[i].public_id;
+      });
+      console.log(isNotDelete);
+      if (isNotDelete.length > 0) {
+        imageUpdate.push({
+          url: product.image[i].url,
+          public_id: product.image[i].public_id,
         });
-        console.log(isNotDelete);
-        if (isNotDelete.length > 0)
-          imageUpdate.push({
-            url: product.image[i].url,
-            public_id: product.image[i].public_id,
-          });
-        else deleteImage.push(product.image[i].public_id);
+      }  
+      else {
+        console.log('is not delete', isNotDelete.length);
+        deleteImage.push(product.image[i].public_id);
       }
-      //
+    }
+    //
       if ( deleteImage.length > 0) {
         console.log(deleteImage.length);
+        console.log(deleteImage);
         await cloudinary.api.delete_resources(deleteImage, function (err, result) {
-          console.log(result);
-        });
-      }
-
-      product.name = name;
-      product.price = price;
-      product.material = material;
-      product.care = care;
-      (product.image = imageUpdate),
-        (product.posterImage = imageUpdate[0]),
-        (product.description = description);
-      product.tag = tag;
-      product.categoryId = categoryId;
-      const updateProduct = await product.save();
-      res.status(200).json({
-        message: "Product updated",
-        product: updateProduct,
+        console.log(result);
       });
-    } catch (err) {
-      throw err;
     }
-  });
+
+    product.name = name;
+    product.price = price;
+    product.material = material;
+    product.care = care;
+    (product.image = imageUpdate),
+      (product.posterImage = imageUpdate[0]),
+      (product.description = description);
+    product.tag = tag;
+    product.categoryId = categoryId;
+    const updateProduct = await product.save();
+    res.status(200).json({
+      message: "Product updated",
+      product: updateProduct,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
 
 exports.deleteProduct = async (req, res) => {
   try {
