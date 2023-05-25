@@ -97,9 +97,11 @@ const cloudinaryImageUploadMethod = async (file) => {
         else deleteImage.push(product.image[i].public_id);
       }
       //
+      if ( deleteImage.length > 0) {
       await cloudinary.api.delete_resources(deleteImage, function (err, result) {
         console.log(result);
       });
+      }
 
       product.name = name;
       product.price = price;
