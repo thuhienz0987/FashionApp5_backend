@@ -98,9 +98,10 @@ const cloudinaryImageUploadMethod = async (file) => {
       }
       //
       if ( deleteImage.length > 0) {
-      await cloudinary.api.delete_resources(deleteImage, function (err, result) {
-        console.log(result);
-      });
+        console.log(deleteImage.length);
+        await cloudinary.api.delete_resources(deleteImage, function (err, result) {
+          console.log(result);
+        });
       }
 
       product.name = name;
