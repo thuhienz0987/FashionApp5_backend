@@ -92,7 +92,7 @@ const cloudinaryImageUploadMethod = async (file) => {
         if (isNotDelete.length > 0)
           imageUpdate.push({
             url: product.image[i].url,
-            public_id: blog.image[i].public_id,
+            public_id: product.image[i].public_id,
           });
         else deleteImage.push(product.image[i].public_id);
       }
