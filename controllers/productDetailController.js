@@ -128,11 +128,19 @@ exports.getDetailProductByProductId = async (req, res) => {
       res.status(410).send("product is deleted");
     } else {
       const detail = await ProductDetail.find({ productId: _id });
+      let detailWithName =[];
       if (detail.length === 0)
         throw new NotFoundError(
           `Not found detail product in product id ${_id}`
         );
-      res.status(200).json(detail);
+        await Promise.all(detail.map(async (item) =>{
+          const size = await Size.findById(item.sizeId);
+          const color = await Color.findById(item.colorId);
+          detailWithName.push({...item._doc, colorName: color.name, sizeName: size.name});
+        }))
+      
+
+      res.status(200).json(detailWithName);
     }
   } catch (err) {
     throw err;
