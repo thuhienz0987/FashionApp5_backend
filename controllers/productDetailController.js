@@ -3,6 +3,7 @@ const Product = require("../models/Product");
 const NotFoundError = require("../errors/notFoundError");
 const Color = require("../models/Color");
 const Size = require("../models/Size");
+const { default: mongoose } = require("mongoose");
 
 exports.postCreateDetail = async (req, res) => {
   try {
@@ -149,25 +150,33 @@ exports.getDetailProductByProductId = async (req, res) => {
 
 exports.postCreateMultipleDetail = async (req, res) => {
   try {
+    let lc=0;
     const { colorId, productId, sizeQuantity } = req.body;
     const product = await Product.findById(productId);
     const color = await Color.findById(colorId);
     if (!product) throw new NotFoundError("ProductId not found");
     if (!color) throw new NotFoundError("ColorId not found");
     if (product.isDeleted) throw new NotFoundError("Product has been deleted");
+    
+    const testProduct = await Promise.all(
+      sizeQuantity.map(async({sizeId,quantity})=>{
+
+      })
+    )
 
     const productDetails = await Promise.all(
       sizeQuantity.map(async ({ sizeId, quantity }) => {
         const p = await ProductDetail.findOne({
           productId: productId,
           colorId: colorId,
-          sizeId: sizeId,
-        });
-        if (p) throw new NotFoundError("Detail exists");
+          sizeId: sizeId,        });
 
         console.log(sizeId);
         const size = await Size.findById(sizeId);
         if (!size) throw new NotFoundError("sizeId not found");
+        if(quantity!==0) {
+          lc=1;
+        }
         if(typeof quantity==='string'){
           quantity=+quantity;
         }
@@ -181,17 +190,21 @@ exports.postCreateMultipleDetail = async (req, res) => {
       })
     );
 
-    await ProductDetail.insertMany(productDetails);
+    if(lc===1){
+      await ProductDetail.insertMany(productDetails);
 
-    product.quantity += sizeQuantity.reduce(
-      (total, { quantity }) => total + quantity,
-      0
-    );
-    await product.save();
-
-    res.status(201).json({
-      message: "Multiple detail product created successfully",
-    });
+      product.quantity += sizeQuantity.reduce(
+        (total, { quantity }) => total + quantity,
+        0
+      );
+      await product.save();
+  
+      res.status(201).json({
+        message: "Multiple detail product created successfully",
+      });
+    }
+    else { throw new NotFoundError ("No detail with quantity found")}
+    
   } catch (err) {
     throw err;
   }
