@@ -39,6 +39,7 @@ module.exports.getAllOrders = async (req, res) => {
                 if(!productDetail) throw new InternalServerError("ProductDetail went wrong")
                 if(productDetail.isDeleted) throw new NotFoundError("ProductDetail not exists")
                 console.log({productDetail});
+                
                 const size= await Size.findById(productDetail.sizeId);
                 if(!size) throw new InternalServerError("Size went wrong");
                 if(size.isDeleted) throw new NotFoundError("Size not exists")
