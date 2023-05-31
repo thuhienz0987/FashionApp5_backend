@@ -55,7 +55,7 @@ module.exports.getAllOrders = async (req, res) => {
                 products.push({...detailItem._doc, size: size.name, color: color.name, image: product.posterImage, price: product.price, productName: product.name })
                 console.log({products});
             }))
-            orderArray.push({...item._doc, userName: user.firstName+ " " + user.lastName, products});
+            orderArray.push({...item._doc, userName: user.firstName+ " " + user.lastName, productDetails: products});
             console.log({orderArray})
 
         }))
