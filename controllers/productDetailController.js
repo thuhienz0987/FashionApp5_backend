@@ -157,12 +157,8 @@ exports.postCreateMultipleDetail = async (req, res) => {
     if (!product) throw new NotFoundError("ProductId not found");
     if (!color) throw new NotFoundError("ColorId not found");
     if (product.isDeleted) throw new NotFoundError("Product has been deleted");
+    // if(sizeQuantity.length===0)
     
-    const testProduct = await Promise.all(
-      sizeQuantity.map(async({sizeId,quantity})=>{
-
-      })
-    )
 
     const productDetails = await Promise.all(
       sizeQuantity.map(async ({ sizeId, quantity }) => {

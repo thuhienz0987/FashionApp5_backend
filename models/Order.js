@@ -35,6 +35,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: [true, "Order must include status"],
         enum: allowStatusValue,
+    },
+    address: {
+        type: mongoose.Types.ObjectId, 
+        required: [true, "Order must include customer's address"],
     }
 });
 

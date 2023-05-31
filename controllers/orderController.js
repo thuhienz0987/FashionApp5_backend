@@ -4,6 +4,11 @@ const DetailProduct = require('../models/ProductDetail');
 const Product = require('../models/Product');
 const NotFoundError = require('../errors/notFoundError');
 const { createShipment, finishShipment } = require('./shipmentController');
+const User = require('../models/User');
+const ProductDetail = require('../models/ProductDetail');
+const Size = require('../models/Size');
+const Color = require('../models/Color');
+const InternalServerError = require('../errors/internalServerError');
 
 // new, in progress, shipping, complete, cancel, return
 
@@ -21,9 +26,41 @@ module.exports.getOrderByUserId = async (req, res) => {
 
 module.exports.getAllOrders = async (req, res) => {
     try {
+        let orderArray = [];
         const orders = await Order.find();
+        if(!orders) throw new InternalServerError("Order went wrong ");
+        await Promise.all(orders.map( async (item) => {
+            const user = await User.findById(item.userId);
+            if(!user) throw new InternalServerError("User went wrong");
+            let products = [];
+            await Promise.all(item.productDetails.map(async (detailItem) => {
+                console.log({detailItem})
+                const productDetail = await ProductDetail.findById(detailItem.productDetailId);
+                if(!productDetail) throw new InternalServerError("ProductDetail went wrong")
+                if(productDetail.isDeleted) throw new NotFoundError("ProductDetail not exists")
+                console.log({productDetail});
+                const size= await Size.findById(productDetail.sizeId);
+                if(!size) throw new InternalServerError("Size went wrong");
+                if(size.isDeleted) throw new NotFoundError("Size not exists")
 
-        res.status(200).json({orders: orders});
+                const color = await Color.findById(productDetail.colorId);
+                if(!color) throw new InternalServerError("Color went wrong");
+                if(color.isDeleted) throw new NotFoundError("Color not exists")
+
+                const product = await Product.findById(productDetail.productId);
+                if(!product) throw new InternalServerError("Product went wrong");
+                if(product.isDeleted) throw new NotFoundError("Product not exists")
+
+                products.push({...detailItem._doc, size: size.name, color: color.name, image: product.posterImage, price: product.price, productName: product.name })
+                console.log({products});
+            }))
+            orderArray.push({...item._doc, userName: user.firstName+ " " + user.lastName, products});
+            console.log({orderArray})
+
+        }))
+
+
+        res.status(200).json({orderArray});
     }
     catch (err) {
         throw err;
