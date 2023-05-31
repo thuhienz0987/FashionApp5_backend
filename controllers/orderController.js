@@ -55,7 +55,7 @@ module.exports.getAllOrders = async (req, res) => {
                 products.push({...detailItem._doc, size: size.name, color: color.name, image: product.posterImage, price: product.price, productName: product.name })
                 console.log({products});
             }))
-            orderArray.push({...item._doc, userName: user.firstName+ " " + user.lastName, productDetails: products});
+            orderArray.push({...item._doc, userName: user.firstName+ " " + user.lastName, productDetails:                                                                                                                                                       products});
             console.log({orderArray})
 
         }))
@@ -76,7 +76,7 @@ const findPrice = async (detailId) => {
 
 module.exports.createOrder = async (req, res) => {
     try {
-        const { userId, productDetails } = req.body;
+        const { userId, productDetails, note } = req.body;
 
         if(productDetails)
         if( Array.isArray(productDetails) && productDetails.length === 0) throw new BadRequestError("Can not create an order that does not have any product")
@@ -90,7 +90,7 @@ module.exports.createOrder = async (req, res) => {
         }));
 
         const order = await Order.create({
-            userId, productDetails, orderTotalPrice, orderStatus
+            userId, productDetails, orderTotalPrice, orderStatus, note
         })
 
         res.status(201).json({order: order});

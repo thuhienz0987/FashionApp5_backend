@@ -16,6 +16,10 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'An order must include total price']
     },
+    note: {
+        type: String,
+        maxLength: [500,'A note must have maximum of 500 character'],
+    },
     productDetails: [{
         productDetailId: {
             type: mongoose.Types.ObjectId,
