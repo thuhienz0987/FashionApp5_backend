@@ -137,7 +137,7 @@ exports.getDetailProductByProductId = async (req, res) => {
         await Promise.all(detail.map(async (item) =>{
           const size = await Size.findById(item.sizeId);
           const color = await Color.findById(item.colorId);
-          detailWithName.push({...item._doc, colorName: color.name, sizeName: size.name});
+          detailWithName.push({...item._doc, colorName: color.name, sizeName: size.name, colorCode: color.code});
         }))
       
 
