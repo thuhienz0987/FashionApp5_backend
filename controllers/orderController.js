@@ -135,11 +135,12 @@ module.exports.changeOrderStatus = async (req, res) => {
         if ( order.orderStatus === "shipping" && (orderStatus !== "complete" && orderStatus !== "return")) 
             throw new BadRequestError("shipping status can only turn into complete or return");
 
+        order.status = orderStatus;
         const editedOrder = await order.save();
         // if ( editedOrder === "shipping" ) createShipment(editedOrder._id);
         // if ( editedOrder === "complete" ) finishShipment(editedOrder._id);
 
-        res.status(200).json({order: order, message: "Order status changed successfully"});
+        res.status(200).json({order: editedOrder, message: "Order status changed successfully"});
     }
     catch (err) {
         throw err;
