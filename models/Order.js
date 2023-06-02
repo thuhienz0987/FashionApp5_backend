@@ -40,10 +40,25 @@ const orderSchema = new mongoose.Schema({
         required: [true, "Order must include status"],
         enum: allowStatusValue,
     },
-    // address: {
-    //     type: mongoose.Types.ObjectId, 
-    //     required: [true, "Order must include customer's address"],
-    // }
+    address: {
+        required: [true, "Order must include address"],
+        city: {
+            type: String,
+            required: [true, "city must be include"],
+        },
+        district: {
+            type: String,
+            required: [true, "district must be include"],
+        },
+        ward: {
+            type: String,
+            required: [true, "ward must be include"],
+        },
+        streetAndNumber: {
+            type: String,
+            required: [true, "address must be include"],
+        }
+    }
 });
 
 const Order = mongoose.model('Order', orderSchema);

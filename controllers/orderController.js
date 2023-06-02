@@ -76,7 +76,7 @@ const findPrice = async (detailId) => {
 
 module.exports.createOrder = async (req, res) => {
     try {
-        const { userId, productDetails, note } = req.body;
+        const { userId, productDetails, note, address } = req.body;
 
         if(productDetails)
         if( Array.isArray(productDetails) && productDetails.length === 0) throw new BadRequestError("Can not create an order that does not have any product")
@@ -90,7 +90,7 @@ module.exports.createOrder = async (req, res) => {
         }));
 
         const order = await Order.create({
-            userId, productDetails, orderTotalPrice, orderStatus, note
+            userId, productDetails, orderTotalPrice, orderStatus, note, address
         })
 
         res.status(201).json({order: order});
@@ -136,8 +136,8 @@ module.exports.changeOrderStatus = async (req, res) => {
             throw new BadRequestError("shipping status can only turn into complete or return");
 
         const editedOrder = await order.save();
-        if ( editedOrder === "shipping" ) createShipment(editedOrder._id);
-        if ( editedOrder === "complete" ) finishShipment(editedOrder._id);
+        // if ( editedOrder === "shipping" ) createShipment(editedOrder._id);
+        // if ( editedOrder === "complete" ) finishShipment(editedOrder._id);
 
         res.status(200).json({order: order, message: "Order status changed successfully"});
     }
