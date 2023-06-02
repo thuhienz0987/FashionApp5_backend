@@ -126,13 +126,13 @@ module.exports.changeOrderStatus = async (req, res) => {
         const order = await Order.findById(_id);
         if (!order) throw new NotFoundError("No order found with the Id");
 
-        if ( order.orderStatus === "new" && (orderStatus !== "cancel" || orderStatus !== "in progress")) 
+        if ( order.orderStatus === "new" && (orderStatus !== "cancel" && orderStatus !== "in progress")) 
             throw new BadRequestError("new status can only turn into cancel or in progress");
 
-        if ( order.orderStatus === "in progress" && (orderStatus !== "cancel" || orderStatus !== "shipping")) 
+        if ( order.orderStatus === "in progress" && (orderStatus !== "cancel" && orderStatus !== "shipping")) 
             throw new BadRequestError("in progress status can only turn into cancel or shipping");
 
-        if ( order.orderStatus === "shipping" && (orderStatus !== "complete" || orderStatus !== "return")) 
+        if ( order.orderStatus === "shipping" && (orderStatus !== "complete" && orderStatus !== "return")) 
             throw new BadRequestError("shipping status can only turn into complete or return");
 
         const editedOrder = await order.save();
