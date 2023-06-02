@@ -10,6 +10,7 @@ const refreshRoutes = require('./refreshRoutes');
 const categoryRoutes = require('./categoryRoutes');
 
 const productRouters= require('./productRouters');
+const addressRouters = require('./addressRouters');
 const tagRouters=require('./tagRouters');
 const sizeRouters= require('./sizeRouters');
 const colorRouters= require('./colorRouters');
@@ -42,6 +43,7 @@ router.use(blogRouters);
 router.use(collectionRouters);
 router.use(orderRouters);
 router.use(cartRouters);
+router.use(addressRouters);
 
 
 
