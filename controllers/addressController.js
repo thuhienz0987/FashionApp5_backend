@@ -56,7 +56,7 @@ module.exports.editAddresses = async (req, res) => {
 module.exports.addNewAddress = async (req, res) => {
     try {
         const { addressObject } = req.body;
-        const _id = req.params; 
+        const {_id} = req.params; 
         const address = await Address.findOne({userId: _id});
 
         // check if exist
