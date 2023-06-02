@@ -41,7 +41,6 @@ const orderSchema = new mongoose.Schema({
         enum: allowStatusValue,
     },
     address: {
-        required: [true, "Order must include address"],
         city: {
             type: String,
             required: [true, "city must be include"],
