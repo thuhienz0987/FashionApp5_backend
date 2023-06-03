@@ -20,7 +20,7 @@ module.exports.getAddressByUserId = async (req, res) => {
         const { userId } = req.params;
         
         // find cart
-        const address = Address.findOne({userId: userId});
+        const address = await Address.findOne({userId: userId});
 
         if (!address) throw new InternalServerError("Something has went wrong");
 
