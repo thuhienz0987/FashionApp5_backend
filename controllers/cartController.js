@@ -7,7 +7,7 @@ module.exports.getCartByUserId = async (req, res) => {
         const { userId } = req.params;
         
         // find cart
-        const cart = Cart.findOne({userId: userId});
+        const cart = await Cart.findOne({userId: userId});
 
         if (!cart) throw new InternalServerError("Something has went wrong");
 
