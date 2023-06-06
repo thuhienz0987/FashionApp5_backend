@@ -7,7 +7,13 @@ module.exports.getCartByUserId = async (req, res) => {
         const { userId } = req.params;
         
         // find cart
-        const cart = Cart.findOne({userId: userId});
+        const cart = await Cart.findOne({userId: userId}).populate({
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'productId'
+            }
+        });
+
 
         if (!cart) throw new InternalServerError("Something has went wrong");
 
@@ -53,7 +59,7 @@ module.exports.resetProductOfCart = async (req, res) => {
     }
 };
 
-module.exports. editCart = async (req, res) => {
+module.exports.editCart = async (req, res) => {
     try {
         const { productDetails } = req.body;
         const { _id } = req.params; // (cart id)
