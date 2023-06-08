@@ -1,6 +1,9 @@
 const InternalServerError = require('../errors/internalServerError');
 const NotFoundError = require('../errors/notFoundError');
 const Cart = require('../models/Cart');
+const Color = require('../models/Color');
+const ProductDetail = require('../models/ProductDetail');
+const Size = require('../models/Size');
 
 module.exports.getCartByUserId = async (req, res) => {
     try {
@@ -8,9 +11,23 @@ module.exports.getCartByUserId = async (req, res) => {
         
         // find cart
         const cart = await Cart.findOne({userId: userId}).populate({
+            
             path: 'productDetails.productDetailId',
             populate: {
                 path: 'productId'
+                
+            }
+        }).populate({
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'sizeId'
+                
+            }
+        }).populate({
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'colorId'
+                
             }
         });
 
