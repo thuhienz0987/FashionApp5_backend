@@ -1,6 +1,5 @@
 const BadRequestError = require('../errors/badRequestError');
 const Order = require('../models/Order');
-const DetailProduct = require('../models/ProductDetail');
 const Product = require('../models/Product');
 const NotFoundError = require('../errors/notFoundError');
 const { createShipment, finishShipment } = require('./shipmentController');
@@ -69,7 +68,7 @@ module.exports.getAllOrders = async (req, res) => {
 };
 
 const findPrice = async (detailId) => {
-    const { productId } = await DetailProduct.findById(detailId);
+    const { productId } = await ProductDetail.findById(detailId);
     const product = await Product.findById(productId);
     return product.price;
 }
@@ -134,6 +133,16 @@ module.exports.changeOrderStatus = async (req, res) => {
 
         if ( order.orderStatus === "shipping" && (orderStatus !== "complete" && orderStatus !== "return")) 
             throw new BadRequestError("shipping status can only turn into complete or return");
+        if (orderStatus === "complete") {
+            for (const item of order.productDetails) {
+                const productDetail = await ProductDetail.findById(item.productDetailId);
+                const product = await Product.findById(productDetail.productId);
+                console.log({product})
+            
+                product.sale = product.sale + item.quantity;
+                await product.save();
+            }
+        }
 
         order.orderStatus = orderStatus;
         const editedOrder = await order.save();
