@@ -9,6 +9,7 @@ const refreshRoutes = require('./refreshRoutes');
 
 const categoryRoutes = require('./categoryRoutes');
 
+const ratingRouters = require('./ratingRoutes');
 const productRouters= require('./productRouters');
 const addressRouters = require('./addressRouters');
 const tagRouters=require('./tagRouters');
@@ -44,6 +45,7 @@ router.use(collectionRouters);
 router.use(orderRouters);
 router.use(cartRouters);
 router.use(addressRouters);
+router.use(ratingRouters);
 
 
 

@@ -1,6 +1,6 @@
 const {Router} =require('express');
 const productController = require('../controllers/productController');
-const isAuth= require('../middlewares/is-auth');
+// const isAuth= require('../middlewares/is-auth');
 const uploads = require('../middlewares/image');
 
 

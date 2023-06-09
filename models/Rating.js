@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const RatingBar = ['unSatisfy','normal','satisfy'];
+// unSatisfy','normal','satisfy'
+const RatingBar = [1,2,3];
 
 const ratingSchema = new mongoose.Schema({
     rate:{
