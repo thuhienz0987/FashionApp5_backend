@@ -14,7 +14,25 @@ const InternalServerError = require('../errors/internalServerError');
 module.exports.getOrderByUserId = async (req, res) => {
     try {
         const userId = req.params._id;
-        const orders = await Order.find({userId: userId});
+        const orders = await Order.find({userId: userId}).populate({     
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'productId'
+                
+            }
+        }).populate({
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'sizeId'
+                
+            }
+        }).populate({
+            path: 'productDetails.productDetailId',
+            populate: {
+                path: 'colorId'
+                
+            }
+        });
 
         res.status(200).json({orders: orders});
     }

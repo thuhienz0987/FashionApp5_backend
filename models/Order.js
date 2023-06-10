@@ -24,6 +24,7 @@ const orderSchema = new mongoose.Schema({
         productDetailId: {
             type: mongoose.Types.ObjectId,
             required: [true,'A product detail must have Id'],
+            ref: 'ProductDetail',
         },
         quantity: {
             type: Number,
