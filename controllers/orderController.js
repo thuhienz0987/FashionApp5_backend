@@ -155,17 +155,29 @@ module.exports.changeOrderStatus = async (req, res) => {
             for (const item of order.productDetails) {
                 const productDetail = await ProductDetail.findById(item.productDetailId);
                 const product = await Product.findById(productDetail.productId);
-                console.log({product})
             
                 product.sale = product.sale + item.quantity;
+                product.quantity = product.quantity- item.quantity;
+                productDetail.quantity= productDetail.quantity - item.quantity;
+                await productDetail.save();
                 await product.save();
             }
         }
 
+        if(orderStatus==="return"){
+            for (const item of order.productDetails) {
+                const productDetail = await ProductDetail.findById(item.productDetailId);
+                const product = await Product.findById(productDetail.productId);
+            
+                product.sale = product.sale - item.quantity;
+                product.quantity = product.quantity+ item.quantity;
+                productDetail.quantity= productDetail.quantity + item.quantity;
+                await productDetail.save();
+                await product.save();
+            }
+        }
         order.orderStatus = orderStatus;
         const editedOrder = await order.save();
-        // if ( editedOrder === "shipping" ) createShipment(editedOrder._id);
-        // if ( editedOrder === "complete" ) finishShipment(editedOrder._id);
 
         res.status(200).json({order: editedOrder, message: "Order status changed successfully"});
     }

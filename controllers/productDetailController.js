@@ -18,7 +18,7 @@ exports.postCreateDetail = async (req, res) => {
     });
     console.log(productDetail);
     await productDetail.save();
-    product.quantity = product.quantity + quantity;
+    product.quantity = product.quantity + quantity + 0;
     await product.save();
     res.status(201).json({
       message: "Detail product created successfully",
@@ -64,7 +64,7 @@ exports.putUpdateDetail = async (req, res) => {
     const product = await Product.findById(productId);
 
     const productDetail = await ProductDetail.findById(_id);
-    product.quantity = product.quantity - productDetail.quantity + quantity;
+    product.quantity = product.quantity - productDetail.quantity + quantity+0;
 
     productDetail.sizeId = sizeId;
     productDetail.colorId = colorId;
