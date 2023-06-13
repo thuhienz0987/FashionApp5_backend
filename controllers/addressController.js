@@ -62,8 +62,13 @@ module.exports.addNewAddress = async (req, res) => {
         // check if exist
         if (!address) throw new NotFoundError("None of address was found");
         
-        // first address granted isDefault
+        // first address granted isDefault-
         if (address.addresses.length === 0) addressObject.isDefault = true;
+        // else {
+        //     address.addresses.map((item)=>{
+        //         item.isDefault=false;
+        //     })
+        // }
         address.addresses = [...address.addresses, addressObject ];
         await address.save();
         res.status(200).json({

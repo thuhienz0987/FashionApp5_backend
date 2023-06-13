@@ -93,7 +93,8 @@ const findPrice = async (detailId) => {
 
 module.exports.createOrder = async (req, res) => {
     try {
-        const { userId, productDetails, note, address } = req.body;
+        const { userId, productDetails, note, address, orderMethod} = req.body;
+        let shippingCost=0;
 
         if(productDetails)
         if( Array.isArray(productDetails) && productDetails.length === 0) throw new BadRequestError("Can not create an order that does not have any product")
@@ -102,12 +103,15 @@ module.exports.createOrder = async (req, res) => {
         let orderTotalPrice = 0
         // find total price
         await Promise.all(productDetails.map(async (productDetail) => {
-            const price = await findPrice(productDetail.productDetailId);
+            const price = await (findPrice(productDetail.productDetailId)+ shippingCost);
             orderTotalPrice += price * parseInt(productDetail.quantity, 10);
         }));
 
+        if(orderMethod=="Delivery"){
+            shippingCost = 5;
+        }
         const order = await Order.create({
-            userId, productDetails, orderTotalPrice, orderStatus, note, address
+            userId, productDetails, orderTotalPrice, orderStatus, note, address, orderMethod, shippingCost
         })
 
         res.status(201).json({order: order});

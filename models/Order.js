@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const { number } = require('sharp/lib/is');
 
 const allowStatusValue = ['new', 'in progress', 'shipping', 'complete', 'cancel', 'return'];
+const OrderMethod= ["PickUp at store","Delivery"];
 
 const orderSchema = new mongoose.Schema({
     userId:{
@@ -40,6 +42,16 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: [true, "Order must include status"],
         enum: allowStatusValue,
+    },
+    shippingCost:{
+        type: Number,
+        required: [true, "Order must include shipping cost"],
+        default: 0,
+    },
+    orderMethod:{
+        type: String,
+        required: [true, "Order must include order method"],
+        enum: OrderMethod,
     },
     address: {
         city: {
