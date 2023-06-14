@@ -85,10 +85,10 @@ module.exports.getAllOrders = async (req, res) => {
     }
 };
 
-const findPrice = async (detailId) => {
+const findPrice = async (detailId, shippingCost) => {
     const { productId } = await ProductDetail.findById(detailId);
     const product = await Product.findById(productId);
-    return product.price;
+    return product.price+shippingCost;
 }
 
 module.exports.createOrder = async (req, res) => {
@@ -103,7 +103,7 @@ module.exports.createOrder = async (req, res) => {
         let orderTotalPrice = 0
         // find total price
         await Promise.all(productDetails.map(async (productDetail) => {
-            const price = await (findPrice(productDetail.productDetailId)+ shippingCost);
+            const price = await (findPrice(productDetail.productDetailId, shippingCost));
             orderTotalPrice += price * parseInt(productDetail.quantity, 10);
         }));
 
