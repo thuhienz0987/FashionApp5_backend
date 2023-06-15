@@ -93,30 +93,38 @@ const findPrice = async (detailId) => {
 
 module.exports.createOrder = async (req, res) => {
     try {
-        const { userId, productDetails, note, address, orderMethod} = req.body;
+        const { userId, productDetails, note, orderMethod} = req.body;
         let shippingCost=0;
-
         if(productDetails)
         if( Array.isArray(productDetails) && productDetails.length === 0) throw new BadRequestError("Can not create an order that does not have any product")
         const orderStatus = "new";
-
         let orderTotalPrice = 0
-        if(orderMethod=="Delivery"){
-            shippingCost = 5;
-        }
+        
         // find total price
         await Promise.all(productDetails.map(async (productDetail) => {
             const price = await (findPrice(productDetail.productDetailId));
             orderTotalPrice += price * parseInt(productDetail.quantity, 10);
         }));
 
-        orderTotalPrice+=parseInt(shippingCost);
-       
-        const order = await Order.create({
-            userId, productDetails, orderTotalPrice, orderStatus, note, address, orderMethod, shippingCost
-        })
+        if(orderMethod=="Delivery"){
+            shippingCost = 5;
+            const {address} = req.body;
+            orderTotalPrice+=parseInt(shippingCost);
+            
+            if(!address||!address.city ||!address.district ||!address.ward ||!address.streetAndNumber) throw new BadRequestError("Please fill in the address information")
+            const order = await Order.create({
+                userId, productDetails, orderTotalPrice, orderStatus, note, address, orderMethod, shippingCost
+            })
+            res.status(201).json({order: order});
 
-        res.status(201).json({order: order});
+        }
+        else {
+            orderTotalPrice+=parseInt(shippingCost);
+            const order = await Order.create({
+                userId, productDetails, orderTotalPrice, orderStatus, note, orderMethod, shippingCost
+            })
+            res.status(201).json({order: order});
+        }
     }
     catch (err) {
         throw err;
