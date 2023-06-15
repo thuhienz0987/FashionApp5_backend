@@ -56,19 +56,19 @@ const orderSchema = new mongoose.Schema({
     address: {
         city: {
             type: String,
-            required: [true, "city must be include"],
+            // required: [true, "city must be include"],
         },
         district: {
             type: String,
-            required: [true, "district must be include"],
+            // required: [true, "district must be include"],
         },
         ward: {
             type: String,
-            required: [true, "ward must be include"],
+            // required: [true, "ward must be include"],
         },
         streetAndNumber: {
             type: String,
-            required: [true, "address must be include"],
+            // required: [true, "address must be include"],
         }
     }
 });
