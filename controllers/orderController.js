@@ -102,6 +102,14 @@ module.exports.createOrder = async (req, res) => {
         
         // find total price
         await Promise.all(productDetails.map(async (productDetail) => {
+            const proId = await ProductDetail.findById(productDetail.productDetailId).populate();
+            const pro = await Product.findById(proId.productId);
+            if(proId.quantity===0){
+                throw new BadRequestError(`Product ${pro.name} has been out of stock`)
+            }
+            if(productDetail.quantity>proId.quantity){
+                throw new BadRequestError(`Product ${pro.name} has been out of stock`)
+            }
             const price = await (findPrice(productDetail.productDetailId));
             orderTotalPrice += price * parseInt(productDetail.quantity, 10);
         }));
