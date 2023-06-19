@@ -1,5 +1,6 @@
 const InternalServerError = require('../errors/internalServerError');
 const NotFoundError = require('../errors/notFoundError');
+
 const Cart = require('../models/Cart');
 const Color = require('../models/Color');
 const ProductDetail = require('../models/ProductDetail');
