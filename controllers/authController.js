@@ -124,7 +124,7 @@ module.exports.forget_password = async (req, res) => {
         from: 'fashionapp5@gmail.com',
         to: user.email,
         subject: 'Password Reset',
-        html: forgetPasswordTemplate(`http://localhost:3000/reset-password?token=${newToken}&id=${user._id}`),
+        html: forgetPasswordTemplate(`https://fashion-app-0m3s.onrender.com/reset-password?token=${newToken}&id=${user._id}`),
     });
 
     res.status(200).json({"Status": "Success", "message": "Password reset link is sent to your email"});
