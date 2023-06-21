@@ -225,18 +225,3 @@ module.exports.getOrderByStatus = async (req, res) => {
         throw err;
     }
 };
-
-const updateDocuments = async () => {
-    try {
-      // Update the documents to have the default value for the new attribute
-      await Order.updateMany({}, { $set: { rated: false } });
-      console.log('Documents updated successfully.');
-    } catch (err) {
-      console.error('Error updating documents:', err);
-    } finally {
-      // Close the MongoDB connection
-      mongoose.connection.close();
-    }
-};
-
-updateDocuments();

@@ -146,56 +146,56 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-exports.getAllProduct = async (req, res) => {
-  //filtering
-  const queryObj = { ...req.query };
-  const excludeFields = ["page", "sort", "limit", "fields"];
-  excludeFields.forEach((el) => delete queryObj[el]);
-  //
-  let queryStr = JSON.stringify(queryObj);
-  //gte= getter > ; lte = letter < ;
-  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-  let query = Product.find(JSON.parse(queryStr), { isDeleted: false });
+// exports.getAllProduct = async (req, res) => {
+//   //filtering
+//   const queryObj = { ...req.query };
+//   const excludeFields = ["page", "sort", "limit", "fields"];
+//   excludeFields.forEach((el) => delete queryObj[el]);
+//   //
+//   let queryStr = JSON.stringify(queryObj);
+//   //gte= getter > ; lte = letter < ;
+//   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+//   let query = Product.find(JSON.parse(queryStr), { isDeleted: false });
 
-  // sorting
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(",").join(" ");
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort("-createdAt");
-  }
+//   // sorting
+//   if (req.query.sort) {
+//     const sortBy = req.query.sort.split(",").join(" ");
+//     query = query.sort(sortBy);
+//   } else {
+//     query = query.sort("-createdAt");
+//   }
 
-  //field limiting
-  //   if (req.query.fields) {
-  //     const fields = req.query.fields.split(',').join(' ')
-  //     query = query.select(fields)
-  //   } else {
-  //     query = query.select('-__v')
-  //   }
+//   //field limiting
+//   //   if (req.query.fields) {
+//   //     const fields = req.query.fields.split(',').join(' ')
+//   //     query = query.select(fields)
+//   //   } else {
+//   //     query = query.select('-__v')
+//   //   }
 
-  // const page = req.query.page * 1 || 1;
-  // const limit = req.query.limit * 1 || 100;
-  // const skip = (page - 1) * limit;
-  // query = query.skip(skip).limit(limit);
+//   // const page = req.query.page * 1 || 1;
+//   // const limit = req.query.limit * 1 || 100;
+//   // const skip = (page - 1) * limit;
+//   // query = query.skip(skip).limit(limit);
 
-  // await Product.find(JSON.parse(queryStr),{isDeleted: false})
-  query
-    .then((result) => {
-      console.log(result.length);
-      if (result.length === 0)
-        throw new NotFoundError("No product found, please try again !");
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      throw err;
-    });
-};
+//   // await Product.find(JSON.parse(queryStr),{isDeleted: false})
+//   await query
+//     .then((result) => {
+//       console.log(result.length);
+//       if (result.length === 0)
+//         throw new NotFoundError("No product found, please try again !");
+//       res.status(200).send(result);
+//     })
+//     .catch((err) => {
+//       throw err;
+//     });
+// };
 
 exports.getRandomProduct = async (req, res) => {
   await Product.find({ isDeleted: false })
     .limit(10)
     .then((result) => {
-      res.send(result);
+      res.status(200).send(result);
     })
     .catch((err) => {
       throw err;
@@ -308,3 +308,12 @@ exports.getNameTagByProductId = async (req, res) => {
   }
 };
 
+exports.getAllProduct = async (req, res) => {
+  await Product.find({ isDeleted: false })
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
