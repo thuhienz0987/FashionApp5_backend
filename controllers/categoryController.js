@@ -17,13 +17,13 @@ module.exports.get_category_by_id = async (req, res) => {
     try {
         const _id = req.params._id;
         const category = await Category.findById({_id});
-
-        if (category) {
+        if (category && category.isDeleted === false) {
             res.status(200).json(category);
-        }
-        else {
-            throw new NotFoundError('Category not found');
-        }
+          } else if (category && category.isDeleted === true) {
+            res.status(410).send("Category is deleted");
+          } else {
+            throw new NotFoundError("Category not found");
+          }
     }
     catch (err) {
         throw err;
@@ -84,12 +84,18 @@ module.exports.delete_category = async (req, res) => {
 
 module.exports.get_child_category = async (req, res) => {
     try {
-        const result = await Category.find({ parentId: { $ne: undefined } });
+        const result = await Category.find({ parentId: { $ne: undefined } , isDeleted: false});
         if ( !result ) throw new NotFoundError('Not found any category');
         let categoryWithParentName = []
         await Promise.all(result.map(async(item) => {
             const parent = await Category.findById(item.parentId);
-            if ( !parent ) throw new InternalServerError('Something went wrong when access parentId');
+            if (parent && parent.isDeleted === false) {
+                res.status(200).json(parent);
+              } else if (parent && parent.isDeleted === true) {
+                res.status(410).send("Something went wrong when access parentId");
+              } else {
+                throw new NotFoundError("Something went wrong when access parentId");
+              }
             categoryWithParentName.push({...item._doc, parentName: parent.name});
         }))
         res.status(200).json({category: categoryWithParentName})
