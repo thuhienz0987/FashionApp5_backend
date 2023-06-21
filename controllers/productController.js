@@ -229,7 +229,7 @@ exports.getProductByCategoryId = async (req, res) => {
     else if (category.isDeleted === true) {
       res.status(410).send("Category is deleted");
     } else {
-      const product = await Product.find({ categoryId: _id });
+      const product = await Product.find({ categoryId: _id , isDeleted: false});
       if (product.length === 0)
         throw new NotFoundError(`Not found product in category id ${_id}`);
 
@@ -251,7 +251,7 @@ exports.getProductByTagId = async (req, res) => {
     else if (tag.isDeleted === true) {
       res.status(410).send("Tag is deleted");
     } else {
-      const product = await Product.find({ tag: _id });
+      const product = await Product.find({ tag: _id , isDeleted: false});
       if (product.length === 0)
         throw new NotFoundError(`Not found product in tag id ${_id}`);
       res.status(200).json(product);
@@ -274,7 +274,7 @@ exports.getDeletedProduct = async (req, res) => {
 exports.getProductByMultipleTagId = async (req, res) => {
   try {
     const tags = req.query.tags;
-    const product = await Product.find({ tag: { $in: tags } });
+    const product = await Product.find({ tag: { $in: tags } , isDeleted: false});
     if (product.length === 0) throw new NotFoundError(`Not found product`);
     res.status(200).json(product);
   } catch (err) {
