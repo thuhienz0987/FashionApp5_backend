@@ -31,6 +31,11 @@ const orderSchema = new mongoose.Schema({
         quantity: {
             type: Number,
             required: [true,'A product detail must have quantity'],
+        },
+        rated:{
+            type: Boolean,
+            required: true,
+            default: false,
         }
     }],
     isDeleted: {

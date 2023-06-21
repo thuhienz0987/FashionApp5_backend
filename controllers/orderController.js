@@ -8,6 +8,7 @@ const ProductDetail = require('../models/ProductDetail');
 const Size = require('../models/Size');
 const Color = require('../models/Color');
 const InternalServerError = require('../errors/internalServerError');
+const mongoose = require('mongoose');
 
 // new, in progress, shipping, complete, cancel, return
 
