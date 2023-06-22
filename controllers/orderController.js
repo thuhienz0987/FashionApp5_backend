@@ -174,7 +174,7 @@ module.exports.changeOrderStatus = async (req, res) => {
 
         if ( order.orderStatus === "shipping" && (orderStatus !== "complete" && orderStatus !== "return")) 
             throw new BadRequestError("shipping status can only turn into complete or return");
-        if (orderStatus === "complete") {
+        if (orderStatus === "shipping") {
             for (const item of order.productDetails) {
                 const productDetail = await ProductDetail.findById(item.productDetailId);
                 const product = await Product.findById(productDetail.productId);

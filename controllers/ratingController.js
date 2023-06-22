@@ -48,7 +48,7 @@ exports.postCreateRating = async (req, res) => {
   exports.getRatingByProductId = async (req,res) =>{
     try{
         const _id = req.params._id;
-        const rating = await Rating.find({productId: _id})
+        const rating = await Rating.find({productId: _id, isDeleted: false})
         console.log(rating);
 
         res.status(200).json(rating)
