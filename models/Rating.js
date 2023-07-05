@@ -17,6 +17,16 @@ const ratingSchema = new mongoose.Schema({
         required: true,
         ref: 'Product'
     },
+    productDetailId:{
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'ProductDetail'
+    },
+    orderId:{
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Order'
+    },
     userId:{
         type: mongoose.Types.ObjectId,
         required: true,

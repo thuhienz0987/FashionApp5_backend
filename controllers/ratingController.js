@@ -4,6 +4,7 @@ const cloudinary = require("../helper/imageUpload");
 const { url } = require("../helper/imageUpload");
 const NotFoundError = require("../errors/notFoundError");
 const Product = require("../models/Product");
+const Order = require("../models/Order");
 
 //upload array image use cloudinary
 
@@ -21,7 +22,7 @@ const cloudinaryImageUploadMethod = async (file) => {
 
 exports.postCreateRating = async (req, res) => {
     try {
-      const { rate, comment, productId, userId } = req.body;
+      const { rate, comment, productId, userId, productDetailId, orderId } = req.body;
       let image = [];
       const files = req.files;
       for (const file of files) {
@@ -31,14 +32,23 @@ exports.postCreateRating = async (req, res) => {
       }
 
       const rating = new Rating({
-        rate, comment, productId, userId, image: image
+        rate, comment, productId, userId,productDetailId, orderId, image: image
       });
+      const order=await Order.findById(orderId);
+      order.productDetails.map(item=>{
+        if(item.productDetailId===productDetailId){
+          item.rated= true;
+        }
+        return item;
+      })
       await rating.save();
+      await order.save();
+      console.log({order})
+
       res.status(201).json({
         message: "Rating created",
         rating: rating
       });
-
       
     } catch (err) {
       throw err;
