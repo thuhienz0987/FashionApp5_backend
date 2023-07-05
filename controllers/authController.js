@@ -50,6 +50,7 @@ module.exports.login_post = async (req, res) => {
             {
                 "userInfo": {
                     "userId": user._id,
+                    "roles": user.roles,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,

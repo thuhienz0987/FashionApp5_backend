@@ -77,3 +77,9 @@ module.exports.get_user_by_id = async (req, res) => {
         throw err
     }
 }
+
+// User.updateMany(
+//     {},
+//     {$set:{'roles': 2001}}
+// ).then(res => console.log(res))
+// .catch(err => console.log(err))
