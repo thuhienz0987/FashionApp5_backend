@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
+const ROLES_LIST = require('../config/roles_list')
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -50,7 +51,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'https://res.cloudinary.com/dux8aqzzz/image/upload/v1685547037/xd0gen7b4z5wgwuqfvpz.png',
         required: true
-    }
+    },
+    roles: {
+        type: [String],
+        required: true,
+        default: [ROLES_LIST.User]
+    },
 },
     { timestamps: true }
 );

@@ -10,6 +10,7 @@ const NotFoundError = require('../errors/notFoundError');
 const { createCart } = require('./cartController');
 const InternalServerError = require('../errors/internalServerError');
 const { initAddress } = require('./addressController');
+const ROLES_LIST = require('../config/roles_list');
 
 
 // init password validator
@@ -40,7 +41,8 @@ module.exports.signup_post = async (req, res) => {
             password, 
             firstName, 
             lastName, 
-            phoneNumber
+            phoneNumber,
+            roles: [ROLES_LIST.User]
         })
 
         // create cart
