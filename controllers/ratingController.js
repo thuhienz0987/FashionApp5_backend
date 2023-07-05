@@ -1,5 +1,5 @@
 const Rating = require("../models/Rating");
-
+const { ObjectId } = require('mongodb');
 const cloudinary = require("../helper/imageUpload");
 const { url } = require("../helper/imageUpload");
 const NotFoundError = require("../errors/notFoundError");
@@ -35,16 +35,14 @@ exports.postCreateRating = async (req, res) => {
         rate, comment, productId, userId,productDetailId, orderId, image: image
       });
       const order=await Order.findById(orderId);
-      order.productDetails.map(item=>{
-        if(item.productDetailId===productDetailId){
-          item.rated= true;
+      order.productDetails.forEach((item) => {
+        const objectId =new ObjectId(productDetailId) 
+        if (objectId.toString()===item.productDetailId.toString()) {
+          item.rated = true;
         }
-        return item;
-      })
+      });
       await rating.save();
       await order.save();
-      console.log({order})
-
       res.status(201).json({
         message: "Rating created",
         rating: rating
