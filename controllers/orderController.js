@@ -225,3 +225,18 @@ module.exports.getOrderByStatus = async (req, res) => {
         throw err;
     }
 };
+
+
+// //
+// Order.updateMany(
+//     {}, // Rỗng để áp dụng cho tất cả các đơn hàng
+//     { $set: { 'productDetails.$[].rated': false } } // Cập nhật thuộc tính 'rated' thành true cho tất cả các mục dữ liệu trong 'productDetails'
+//   )
+//     .then(result => {
+//       console.log('Orders updated successfully:', result);
+//       // Thực hiện các thao tác tiếp theo nếu cần thiết
+//     })
+//     .catch(error => {
+//       console.error('Error updating orders:', error);
+//       // Xử lý lỗi nếu có
+//     });
