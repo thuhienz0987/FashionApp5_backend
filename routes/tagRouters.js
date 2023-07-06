@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const tagController = require('../controllers/tagController');
 const verifyRoles = require('../middlewares/verifyRoles');
+const ROLES_LIST = require('../config/roles_list');
 
 const router = Router();
 
