@@ -3,6 +3,7 @@ const productController = require('../controllers/productController');
 // const isAuth= require('../middlewares/is-auth');
 const uploads = require('../middlewares/image');
 const verifyRoles = require('../middlewares/verifyRoles');
+const ROLES_LIST = require('../config/roles_list');
 
 
 const router = Router();

@@ -1,6 +1,7 @@
 const express = require('express');
 const categoryController = require('../controllers/categoryController');
 const verifyRoles = require('../middlewares/verifyRoles');
+const ROLES_LIST = require('../config/roles_list');
 
 const router = express.Router();
 
