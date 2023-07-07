@@ -56,7 +56,19 @@ exports.postCreateRating = async (req, res) => {
   exports.getRatingByProductId = async (req,res) =>{
     try{
         const _id = req.params._id;
-        const rating = await Rating.find({productId: _id, isDeleted: false})
+        const rating = await Rating.find({productId: _id, isDeleted: false}).populate({
+            
+          path: 'productDetailId',
+          populate: {
+            path:'colorId'
+          
+      }
+      }).populate({
+        path: 'productDetailId',
+          populate: {
+            path:'sizeId'
+          }
+      })
         console.log(rating);
 
         res.status(200).json(rating)
