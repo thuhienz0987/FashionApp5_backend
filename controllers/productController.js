@@ -4,6 +4,8 @@ const Tag = require("../models/Tag");
 const cloudinary = require("../helper/imageUpload");
 const NotFoundError = require("../errors/notFoundError");
 const { query } = require("express");
+const ProductDetail = require("../models/ProductDetail");
+const { ObjectId } = require('mongodb');
 
 const cloudinaryImageUploadMethod = async (file) => {
   return new Promise((resolve) => {
@@ -131,9 +133,17 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     const _id = req.params._id;
+    const details = await ProductDetail.find({productId: _id})
+    for (const detail of details) {
+      const objectId = new ObjectId(_id);
+      if (detail.productId.toString() === objectId.toString()) {
+        detail.quantity = 0;
+        await detail.save();
+      }
+    }
     const product = await Product.findByIdAndUpdate(
       { _id },
-      { isDeleted: true },
+      { isDeleted: true , quantity: 0},
       { new: true }
     );
 
