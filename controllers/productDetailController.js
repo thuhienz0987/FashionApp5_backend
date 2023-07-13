@@ -4,6 +4,9 @@ const NotFoundError = require("../errors/notFoundError");
 const Color = require("../models/Color");
 const Size = require("../models/Size");
 const { default: mongoose } = require("mongoose");
+const Cart = require("../models/Cart");
+const { ObjectId } = require('mongodb');
+
 
 exports.postCreateDetail = async (req, res) => {
   try {
@@ -94,10 +97,21 @@ exports.deleteDetail = async (req, res) => {
     await product.save();
     const productDetail = await ProductDetail.findByIdAndUpdate(
       { _id },
-      { isDeleted: true },
+      { isDeleted: true , quantity: 0},
       { new: true }
     );
-
+    
+    const carts = await Cart.find({'productDetails.productDetailId': _id})
+    carts.forEach(async (cart) => {
+      const objectId =new ObjectId(_id) 
+      cart.productDetails.map(async (item) => {
+        if (item.productDetailId.toString() === objectId.toString()) {
+          item.quantity = 0;
+          await cart.save();
+        }
+      });
+    });
+    
     res.status(200).json({
       message: "Detail product deleted",
       productDetail: productDetail,

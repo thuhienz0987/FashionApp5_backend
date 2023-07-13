@@ -35,8 +35,8 @@ exports.postCreateRating = async (req, res) => {
         rate, comment, productId, userId,productDetailId, orderId, image: image
       });
       const order=await Order.findById(orderId);
-      order.productDetails.forEach((item) => {
-        const objectId =new ObjectId(productDetailId) 
+      const objectId =new ObjectId(productDetailId) 
+      order.productDetails.forEach(item => {
         if (objectId.toString()===item.productDetailId.toString()) {
           item.rated = true;
         }
