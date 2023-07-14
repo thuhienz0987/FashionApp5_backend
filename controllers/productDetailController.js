@@ -187,13 +187,14 @@ exports.postCreateMultipleDetail = async (req, res) => {
         if(quantity!==0) {
           lc=1;
         }
+        let newQuantity = 0;
         if(typeof quantity==='string'){
-          quantity=+quantity;
+          newQuantity = parseInt(quantity);
         }
         return new ProductDetail({
           colorId,
           sizeId: sizeId,
-          quantity: quantity,
+          quantity: newQuantity,
 
           productId,
         });
@@ -204,7 +205,7 @@ exports.postCreateMultipleDetail = async (req, res) => {
       await ProductDetail.insertMany(productDetails);
 
       product.quantity += sizeQuantity.reduce(
-        (total, { quantity }) => total + quantity,
+        (total, { quantity }) => total + parseInt(quantity),
         0
       );
       await product.save();
