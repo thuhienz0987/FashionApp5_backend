@@ -90,13 +90,13 @@ module.exports.get_child_category = async (req, res) => {
         await Promise.all(result.map(async(item) => {
             const parent = await Category.findById(item.parentId);
             if (parent && parent.isDeleted === false) {
-                res.status(200).json(parent);
+                categoryWithParentName.push({...item._doc, parentName: parent.name});
               } else if (parent && parent.isDeleted === true) {
                 res.status(410).send("Something went wrong when access parentId");
               } else {
                 throw new NotFoundError("Something went wrong when access parentId");
               }
-            categoryWithParentName.push({...item._doc, parentName: parent.name});
+            
         }))
         res.status(200).json({category: categoryWithParentName})
     }
